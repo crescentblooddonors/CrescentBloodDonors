@@ -1,4 +1,3 @@
-
 import './App.css'
 import ComingSoon from './pages/ComingSoon'
 
