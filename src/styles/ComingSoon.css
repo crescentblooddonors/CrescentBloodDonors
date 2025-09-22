@@ -92,3 +92,13 @@ body {
 .slogan .green {
     color: var(--accent-green);
 }
+
+@media only screen and (max-width:500px) {
+    .time-unit{
+        padding: 5px;
+    }
+
+    #timer{
+        gap: 0.8rem;
+    }
+}
