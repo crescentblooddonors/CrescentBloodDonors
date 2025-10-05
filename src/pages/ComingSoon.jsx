@@ -49,9 +49,9 @@ const ComingSoon = () => {
                 <span className="number">{formatTime(timeLeft.minutes)}</span>
                 <span className="label">Minutes</span>
             </div>
-            <div className="time-unit">
+            <div className="flex flex-col">
                 <span className="number">{formatTime(timeLeft.seconds)}</span>
-                <span className="label">Seconds</span>
+                <span className="text-red-500 bg-blue">Seconds</span>
             </div>
         </div>
     ) : (
