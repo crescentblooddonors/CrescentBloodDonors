@@ -1,22 +1,38 @@
 import React, { useState } from 'react';
+import Logo from '../assets/images.png'
+import { api } from '../config/Url';
+import { useCookies } from 'react-cookie';
+import { useNavigate } from 'react-router-dom';
 
 const AdminAuthPage = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const [cookie,setCookie] = useCookies()
+  let navigate = useNavigate()
 
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
-    // --- Mock Authentication Logic ---
-    // In a real application, you would make an API call to your backend here.
-    if (email === 'admin@crescentblooddonors.org' && password === 'password') {
-      setError('');
-      alert('Login successful!');
-      // Here you would typically redirect the user to the dashboard,
-      // for example, using React Router: history.push('/admin/dashboard')
-    } else {
-      setError('Invalid email or password. Please try again.');
+    try {
+        const response = await api.post('/admin/login',{
+          email,password
+        })
+
+        setCookie('sessionToken',response.data.token)
+        navigate('/admin')
+    } catch (err) {
+      setError(err.response.data.message)  
     }
+    // --- Mock Authentication Logic ---
+    // // In a real application, you would make an API call to your backend here.
+    // if (email === 'admin@crescentblooddonors.org' && password === 'password') {
+    //   setError('');
+    //   alert('Login successful!');
+    //   // Here you would typically redirect the user to the dashboard,
+    //   // for example, using React Router: history.push('/admin/dashboard')
+    // } else {
+    //   setError('Invalid email or password. Please try again.');
+    // }
   };
 
   return (
@@ -26,10 +42,10 @@ const AdminAuthPage = () => {
           <div className="text-center mb-8">
             {/* You can replace this with your actual logo component or image */}
             <div className="w-20 h-20 mx-auto mb-4 bg-blue-100 rounded-full flex items-center justify-center">
-               <i className="fas fa-tint text-4xl text-blue-600"></i>
+                <img src={Logo} className='rounded-full' alt="" />
             </div>
             <h1 className="text-3xl font-bold text-dark-blue">Admin Login</h1>
-            <p className="text-gray-500 mt-2">Crescent Blood Donors Panel</p>
+            <p className="text-gray-500 mt-2">Crescent Blood Donors Admin Panel</p>
           </div>
 
           <form onSubmit={handleLogin} className="space-y-6">
