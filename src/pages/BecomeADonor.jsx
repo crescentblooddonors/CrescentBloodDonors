@@ -27,6 +27,7 @@ const BecomeADonor = () => {
     city:'',
     pincode:'',
     urgency:'',
+    addressLine:'23, Jailania'
   });
 
   const [needData,setNeedData] = useState({

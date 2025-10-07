@@ -1,6 +1,7 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import { api } from '../config/Url';
 import { useCookies } from 'react-cookie';
+import BloodNeedDetails from '../components/BloodDetails';
 
 
 const SortIcon = ({ direction }) => {
@@ -29,8 +30,8 @@ const useTableManager = (initialData) => {
                     if (key === 'location') {
                         return `${item.city}, ${item.state}`.toLowerCase().includes(value.toLowerCase());
                     }
-                     if (key === 'verified') {
-                        return String(item.verified) === value;
+                     if (key === 'verification') {
+                        return String(item.verification) === value;
                     }
                     return String(item[key]).toLowerCase() === value.toLowerCase();
                 });
@@ -77,18 +78,19 @@ const RecipientsView = ({ data, onVerify }) => {
     const { sortedAndFilteredData, requestSort, handleFilterChange, sortConfig } = useTableManager(data);
 
     const commonSelectClasses = "w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-[#153F76] focus:border-[#153F76]";
-
+    const [showDetail,setShowDetail] = useState(false)
+    const [selectedNeed,setSelectedNeed] = useState(null)
     const VerifyButton = ({ item }) => (
          <button
             onClick={() => onVerify(item._id)} // Using _id assuming MongoDB
-            disabled={item.verified}
+            disabled={item.verification}
             className={`w-full md:w-auto px-4 py-2 text-sm font-medium rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 transition-colors duration-200 ${
-                item.verified
+                item.verification
                     ? 'bg-gray-200 text-gray-500 cursor-not-allowed'
                     : 'bg-[#153F76] text-white hover:bg-red-700 focus:ring-[#153F76]'
             }`}
         >
-            {item.verified ? 'Verified' : 'Verify'}
+            {item.verification ? 'Verified' : 'Verify'}
         </button>
     );
 
@@ -110,7 +112,11 @@ const RecipientsView = ({ data, onVerify }) => {
     );
 
     return (
-        <div className="bg-white p-4 sm:p-6 rounded-xl shadow-lg">
+        <>
+        {showDetail?<BloodNeedDetails needData={selectedNeed} handleBack={()=>{
+            setSelectedNeed(null)
+            setShowDetail(false)
+        }}/>:<div className="bg-white p-4 sm:p-6 rounded-xl shadow-lg">
             <h2 className="text-2xl font-bold text-slate-800 mb-6">Recipient Requests</h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
                 <input type="text" placeholder="Filter by City/State..." onChange={e => handleFilterChange('location', e.target.value)} className={commonSelectClasses} />
@@ -124,7 +130,7 @@ const RecipientsView = ({ data, onVerify }) => {
                     <option value="">All Blood Groups</option>
                     <option value="A+">A+</option><option value="A-">A-</option><option value="B+">B+</option><option value="B-">B-</option><option value="AB+">AB+</option><option value="AB-">AB-</option><option value="O+">O+</option><option value="O-">O-</option>
                 </select>
-                <select onChange={e => handleFilterChange('verified', e.target.value)} className={commonSelectClasses}>
+                <select onChange={e => handleFilterChange('verification', e.target.value)} className={commonSelectClasses}>
                     <option value="">All Statuses</option>
                     <option value="true">Verified</option>
                     <option value="false">Not Verified</option>
@@ -147,13 +153,16 @@ const RecipientsView = ({ data, onVerify }) => {
                     </thead>
                     <tbody className="divide-y divide-gray-200">
                         {sortedAndFilteredData.length > 0 ? sortedAndFilteredData.map((item) => (
-                            <tr key={item._id} className="hover:bg-slate-50">
+                            <tr key={item._id} className="hover:bg-slate-50" onClick={()=>{
+                                setSelectedNeed(item);
+                                setShowDetail(true)
+                            }}>
                                 <td className="p-4 whitespace-nowrap text-sm text-gray-800 font-medium">{item.name}</td>
                                 <td className="p-4 whitespace-nowrap text-sm text-gray-700"><span className="font-mono text-[#153F76] font-bold">{item.bloodGroup}</span></td>
                                 <td className="p-4 whitespace-nowrap text-sm text-gray-700">{`${item.city}, ${item.state}`}</td>
                                 <td className="p-4 whitespace-nowrap text-sm text-gray-700">{item.urgency}</td>
                                 <td className="p-4 whitespace-nowrap text-sm text-gray-700">{`${item.severity}%`}</td>
-                                <td className="p-4 whitespace-nowrap text-sm text-gray-700"><StatusBadge verified={item.verified} /></td>
+                                <td className="p-4 whitespace-nowrap text-sm text-gray-700"><StatusBadge verified={item.verification} /></td>
                                 <td className="p-4 whitespace-nowrap text-sm text-gray-700"><VerifyButton item={item} /></td>
                             </tr>
                         )) : (
@@ -177,7 +186,7 @@ const RecipientsView = ({ data, onVerify }) => {
                             <p><span className="font-semibold">Severity:</span> {item.severity}%</p>
                         </div>
                         <div className="flex justify-between items-center pt-2">
-                           <StatusBadge verified={item.verified} />
+                           <StatusBadge verified={item.verification} />
                            <VerifyButton item={item} />
                         </div>
                     </div>
@@ -185,7 +194,8 @@ const RecipientsView = ({ data, onVerify }) => {
                     <div className="text-center p-6 text-gray-500">No records found.</div>
                 )}
             </div>
-        </div>
+        </div>}
+        </>
     );
 };
 
@@ -199,12 +209,12 @@ const DonorsView = ({ data, onVerify }) => {
             onClick={() => onVerify(item._id)} // Using _id assuming MongoDB
             disabled={item.verified}
             className={`w-full md:w-auto px-4 py-2 text-sm font-medium rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 transition-colors duration-200 ${
-                item.verified
+                item.verification
                     ? 'bg-gray-200 text-gray-500 cursor-not-allowed'
                     : 'bg-[#153F76] text-white hover:bg-red-700 focus:ring-[#153F76]'
             }`}
         >
-            {item.verified ? 'Verified' : 'Verify'}
+            {item.verification ? 'Verified' : 'Verify'}
         </button>
     );
 
@@ -284,7 +294,7 @@ const DonorsView = ({ data, onVerify }) => {
                             <p><span className="font-semibold">Last Donated:</span> {new Date(item.lastDonated).toLocaleDateString()}</p>
                         </div>
                         <div className="flex justify-between items-center pt-2">
-                           <StatusBadge verified={item.verified} />
+                           <StatusBadge verified={item.verification} />
                            <VerifyButton item={item} />
                         </div>
                     </div>
@@ -317,8 +327,8 @@ export default function VerificationTable() {
 
                 // Fetch both datasets in parallel
                 const [recipientsResponse, donorsResponse] = await Promise.all([
-                    api.get('/recipients/recipients', { headers }),
-                    api.get('/donors/donors', { headers }) // Assuming this endpoint exists
+                    api.get('/recipients/get-recipient', { headers }),
+                    api.get('/donors/get-donor', { headers }) // Assuming this endpoint exists
                 ]);
 
                 setRecipients(recipientsResponse.data.data);
@@ -338,7 +348,7 @@ export default function VerificationTable() {
     const handleVerify = async (id, type) => {
         if (type === 'recipient') {
           try {
-            await api.put(`/blood-requests/verify-blood-request/${id}`, {}, {
+            await api.put(`/recipients/verify-recipient-request/${id}`, {}, {
               headers: { Authorization: `Bearer ${cookies.sessionToken}` }
             });
             

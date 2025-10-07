@@ -18,7 +18,7 @@ const AdminAuthPage = () => {
           email,password
         })
 
-        setCookie('sessionToken',response.data.token)
+        setCookie('sessionToken',response.data.data.token)
         navigate('/admin')
     } catch (err) {
       setError(err.response.data.message)  
