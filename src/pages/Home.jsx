@@ -1,13 +1,55 @@
-import React, { useState } from 'react';
-import '../styles/Home.css'
-import OurServices from '../components/Acheivements';
+import React, { useState } from "react";
+import "../styles/Home.css";
+import OurServices from "../components/Acheivements";
 
 const Home = () => {
   const [isNavOpen, setIsNavOpen] = useState(false);
 
-  return (
-    <div className='overflow-x-hidden'>
+  // Team member data
+  const teamMembers = [
+    {
+      id: 1,
+      name: "Mohammed Kasim",
+      role: "President",
+      bio: "Oversees the club's vision and impact. Leads strategic partnerships with hospitals and drives community engagement to ensure a steady, reliable donor base.",
+      img: "/assets/ui-face.jpg",
+      social: {
+        facebook: "#",
+        twitter: "#",
+        linkedin: "#",
+        instagram: "#",
+      },
+    },
+    {
+      id: 2,
+      name: "Asmila",
+      role: "Secretary",
+      bio: "Manages the critical logistics of blood requests, coordinates timely donor matching, and maintains the integrity of the donor database.",
+      img: "/assets/ui-face.jpg",
+      social: {
+        facebook: "#",
+        twitter: "#",
+        linkedin: "#",
+        instagram: "#",
+      },
+    },
+    {
+      id: 3,
+      name: "Mohammed Irfan",
+      role: "Joint Secretary",
+      bio: "Focuses on organizing blood drives and awareness campaigns. Connects with new volunteers and handles all public communications.",
+      img: "/assets/ui-face.jpg",
+      social: {
+        facebook: "#",
+        twitter: "#",
+        linkedin: "#",
+        instagram: "#",
+      },
+    },
+  ];
 
+  return (
+    <div className="overflow-x-hidden">
       <div className="decoration top-right-blob">
         <img src="/assets/corner-ill.png" alt="corner-ill" />
       </div>
@@ -15,6 +57,7 @@ const Home = () => {
         <img src="/assets/bot-corner-ill.png" alt="bot-corner-ill" />
       </div>
 
+      {/* Navbar */}
       <header className="navbar">
         <div className="logo-container">
           <div className="logo-circle">
@@ -26,34 +69,55 @@ const Home = () => {
             />
           </div>
         </div>
-        {/* The 'nav-open' class is conditionally applied based on state */}
-        <nav className={`nav-links ${isNavOpen ? 'nav-open' : ''}`}>
-          <a href="#about" onClick={() => setIsNavOpen(false)}>ABOUT US</a>
-          <a href="#members" onClick={() => setIsNavOpen(false)}>MEMBERS</a>
-          <a href="#achivement" onClick={() => setIsNavOpen(false)}>ACHIEVEMENTS</a>
-          <a href="#testimonial" onClick={() => setIsNavOpen(false)}>TESTIMONIALS</a>
+
+        <nav className={`nav-links ${isNavOpen ? "nav-open" : ""}`}>
+          <a href="#about" onClick={() => setIsNavOpen(false)}>
+            ABOUT US
+          </a>
+          <a href="#members" onClick={() => setIsNavOpen(false)}>
+            MEMBERS
+          </a>
+          <a href="#achivement" onClick={() => setIsNavOpen(false)}>
+            ACHIEVEMENTS
+          </a>
+          <a href="#testimonial" onClick={() => setIsNavOpen(false)}>
+            TESTIMONIALS
+          </a>
         </nav>
-        {/* The onClick handler toggles the state */}
-        <button className="menu-toggle" onClick={() => setIsNavOpen(!isNavOpen)}>
-          {/* Dynamically change the icon based on the menu state */}
-          <i className={`fas ${isNavOpen ? 'fa-times' : 'fa-bars'}`}></i>
+
+        <button
+          className="menu-toggle"
+          onClick={() => setIsNavOpen(!isNavOpen)}
+        >
+          <i className={`fas ${isNavOpen ? "fa-times" : "fa-bars"}`}></i>
         </button>
       </header>
 
+      {/* Hero Section */}
       <main className="hero-section">
         <div className="hero-content">
-          <h1 className="main-title">DONATE BLOOD,<br />SAVE LIVES</h1>
-          <p className="subtitle">Connecting donors with those in need instantly</p>
+          <h1 className="main-title">
+            DONATE BLOOD,
+            <br />
+            SAVE LIVES
+          </h1>
+          <p className="subtitle">
+            Connecting donors with those in need instantly
+          </p>
           <div className="cta-buttons">
-            {/* You can replace '#' with your actual links, e.g., '/donor-form' */}
-            <a href="#" className="btn btn-primary">Become a Donor</a>
-            <a href="#" className="btn btn-secondary">Need Blood</a>
+            <a href="#" className="btn btn-primary">
+              Become a Donor
+            </a>
+            <a href="#" className="btn btn-secondary">
+              Need Blood
+            </a>
           </div>
           <div className="playstore-link">
             <i className="fab fa-google-play"></i>
             <span>Playstore Link ( Coming Soon )</span>
           </div>
         </div>
+
         <div className="hero-illustration">
           <img
             src="/assets/Blood donation-ill.png"
@@ -66,27 +130,39 @@ const Home = () => {
       <section>
         <div className="decoration top-bg-wave"></div>
         <div className="content-wrapper">
+          {/* About Section */}
           <section id="about" className="section about-us-section">
             <div className="about-content">
               <div className="text-block">
                 <h2 className="section-title">ABOUT US</h2>
                 <p>
-                  The Crescent Blood Donors Club is a student-founded group founded on April 1st, 2014, by just five students, the Crescent Blood Donors Club has since blossomed into a thriving community of over 100 dedicated members united by a commitment to saving lives and serving society. Operated by the students of  B.S. Abdur Rahman Crescent University, Vandalur, this initiative has become a beacon of hope and solidarity, making a significant impact not only through coordinated blood donations but also through various social service activities. From emergency blood drives to community outreach, the Crescent Blood Donors are working together and  inspiring others to join their mission to make a lasting difference in the world.
+                  The Crescent Blood Donors Club is a student-founded group
+                  established on April 1st, 2014, by just five students. Today,
+                  it’s a thriving community of over 100 dedicated members united
+                  by a commitment to saving lives and serving society.
                 </p>
                 <div>
-                    <span className='font-bold text-[#d93b4e] text-lg'> Join Us in Transforming Lives</span>
-                    <p>Every day, our amazing donors, volunteers, and members come together to make a difference. By donating blood, you become part of a life-saving mission, helping those in emergency and ongoing medical situations.</p>
-                    <span className='font-bold text-[#d93b4e] text-lg'>Our Mission</span>
-                    <ul className='text-[#164476]'>
-                      <li>Bridge the Gap Between Donors and Recipients. </li>
-                      <li>Ensure Seamless Emergency Support.</li>
-                      <li>Empower Disabled Students by volunteering as scribes.</li>
-                      <li>Organize Awareness Programs.</li>
-                      <li>Raise Awareness About Blood Donation.</li> 
-                      <li>Engage Communities Through Outreach Programs</li> 
-                      <li>Empower Students as Changemakers.</li>     
-                    </ul> 
-                    
+                  <span className="font-bold text-[#d93b4e] text-lg">
+                    Join Us in Transforming Lives
+                  </span>
+                  <p>
+                    By donating blood, you become part of a life-saving mission,
+                    helping those in emergencies and ongoing treatments.
+                  </p>
+                  <span className="font-bold text-[#d93b4e] text-lg">
+                    Our Mission
+                  </span>
+                  <ul className="text-[#164476]">
+                    <li>Bridge the Gap Between Donors and Recipients.</li>
+                    <li>Ensure Seamless Emergency Support.</li>
+                    <li>
+                      Empower Disabled Students by volunteering as scribes.
+                    </li>
+                    <li>Organize Awareness Programs.</li>
+                    <li>Raise Awareness About Blood Donation.</li>
+                    <li>Engage Communities Through Outreach Programs.</li>
+                    <li>Empower Students as Changemakers.</li>
+                  </ul>
                 </div>
               </div>
               <div className="image-block">
@@ -98,6 +174,7 @@ const Home = () => {
             </div>
           </section>
 
+          {/* Impact Dashboard */}
           <section className="section impact-section">
             <h3 className="impact-title">Live Impact Dashboard</h3>
             <div className="impact-cards">
@@ -111,44 +188,54 @@ const Home = () => {
               </div>
               <div className="card impact-card">
                 <p className="impact-number">6,500+</p>
-                <p className="impact-label">Request Fullfilled</p>
+                <p className="impact-label">Requests Fulfilled</p>
               </div>
             </div>
           </section>
 
-          <section id="achivement" className="section achievements-section relative">
+          {/* Achievements Section */}
+          <section
+            id="achivement"
+            className="section achievements-section relative"
+          >
             <h3 className="impact-title">Achievements</h3>
             <OurServices />
           </section>
 
+          {/* Meet Our Team Section */}
           <section id="members" className="section team-section">
             <h2 className="section-title meet-title">Meet Our Team</h2>
             <div className="team-grid">
-              {/* Team Member Card - Repeated for demonstration */}
-              {[1, 2, 3].map((item) => (
-                <div className="card team-card" key={item}>
+              {teamMembers.map((member) => (
+                <div className="card team-card" key={member.id}>
                   <div className="profile-pic">
-                    <img src="/assets/ui-face.jpg" alt="Team Member Chris Johan" />
+                    <img src={member.img} alt={`Team Member ${member.name}`} />
                   </div>
                   <div className="team-details">
-                    <p className="member-role">Team Member</p>
-                    <p className="member-name">Chris Johan</p>
-                    <p className="member-bio">
-                      Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
-                      do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-                    </p>
+                    <p className="member-role">{member.role}</p>
+                    <p className="member-name">{member.name}</p>
+                    <p className="member-bio">{member.bio}</p>
                   </div>
                   <div className="social-links">
-                    <a href="#"><i className="fab fa-facebook-f"></i></a>
-                    <a href="#"><i className="fab fa-twitter"></i></a>
-                    <a href="#"><i className="fab fa-linkedin-in"></i></a>
-                    <a href="#"><i className="fab fa-instagram"></i></a>
+                    <a href={member.social.facebook}>
+                      <i className="fab fa-facebook-f"></i>
+                    </a>
+                    <a href={member.social.twitter}>
+                      <i className="fab fa-twitter"></i>
+                    </a>
+                    <a href={member.social.linkedin}>
+                      <i className="fab fa-linkedin-in"></i>
+                    </a>
+                    <a href={member.social.instagram}>
+                      <i className="fab fa-instagram"></i>
+                    </a>
                   </div>
                 </div>
               ))}
             </div>
           </section>
 
+          {/* Testimonials Section */}
           <section id="testimonial" className="section testimonials-section">
             <i className="fas fa-quote-left quote-icon"></i>
             <h2 className="story-title">Stories of Hope</h2>
@@ -156,20 +243,21 @@ const Home = () => {
               Read stories from donors and recipients who have experienced the
               life-changing impact of blood donation through our community.
             </p>
+
             <div className="testimonials-grid">
-               {/* Testimonial Card - Repeated for demonstration */}
               {[1, 2, 3, 4, 5, 6].map((item) => (
                 <div className="card testimonial-card" key={item}>
                   <div className="rating">
-                    <i className="fas fa-star"></i><i className="fas fa-star"></i>
-                    <i className="fas fa-star"></i><i className="fas fa-star"></i>
+                    <i className="fas fa-star"></i>
+                    <i className="fas fa-star"></i>
+                    <i className="fas fa-star"></i>
+                    <i className="fas fa-star"></i>
                     <i className="fas fa-star"></i>
                   </div>
                   <p className="quote-text">
                     "Thanks to Crescent Blood Donors, I received the blood
-                    transfusion I needed during my surgery. The quick response and
-                    professional handling saved my life. I'm forever grateful to
-                    this organization and all the donors."
+                    transfusion I needed during my surgery. Their quick response
+                    saved my life. I'm forever grateful!"
                   </p>
                   <div className="reviewer">
                     <div className="reviewer-avatar"></div>
@@ -178,12 +266,12 @@ const Home = () => {
                 </div>
               ))}
             </div>
+
             <div className="story-share-card">
               <h4 className="story-share-title">Share Your Story</h4>
               <p className="story-share-description">
                 Have you been helped by our blood donation network? We'd love to
-                hear your story and inspire others to join our life-saving
-                community.
+                hear your story and inspire others.
               </p>
               <a href="#" className="submit-testimonial-link">
                 Submit Your Testimonial &rarr;
@@ -191,6 +279,8 @@ const Home = () => {
             </div>
           </section>
         </div>
+
+        {/* Footer */}
         <footer className="footer">
           <div className="footer-grid">
             <div className="footer-column logo-column">
@@ -204,37 +294,72 @@ const Home = () => {
                 <p>CBD</p>
               </div>
               <div className="social-icons">
-                <a href="#"><i className="fab fa-facebook-f"></i></a>
-                <a href="#"><i className="fab fa-twitter"></i></a>
-                <a href="#"><i className="fab fa-instagram"></i></a>
-                <a href="#"><i className="fab fa-linkedin-in"></i></a>
+                <a href="#">
+                  <i className="fab fa-facebook-f"></i>
+                </a>
+                <a href="#">
+                  <i className="fab fa-twitter"></i>
+                </a>
+                <a href="#">
+                  <i className="fab fa-instagram"></i>
+                </a>
+                <a href="#">
+                  <i className="fab fa-linkedin-in"></i>
+                </a>
               </div>
             </div>
+
             <div className="footer-column">
               <h4>About</h4>
               <ul>
-                <li><a href="#">About Us</a></li>
-                <li><a href="#">Careers</a></li>
-                <li><a href="#">Contact Us</a></li>
-                <li><a href="#">Our Team</a></li>
+                <li>
+                  <a href="#">About Us</a>
+                </li>
+                <li>
+                  <a href="#">Careers</a>
+                </li>
+                <li>
+                  <a href="#">Contact Us</a>
+                </li>
+                <li>
+                  <a href="#">Our Team</a>
+                </li>
               </ul>
             </div>
+
             <div className="footer-column">
               <h4>Services</h4>
               <ul>
-                <li><a href="#">Donor Registration</a></li>
-                <li><a href="#">Need Blood</a></li>
-                <li><a href="#">Blood Drives</a></li>
-                <li><a href="#">Testimonials</a></li>
+                <li>
+                  <a href="#">Donor Registration</a>
+                </li>
+                <li>
+                  <a href="#">Need Blood</a>
+                </li>
+                <li>
+                  <a href="#">Blood Drives</a>
+                </li>
+                <li>
+                  <a href="#">Testimonials</a>
+                </li>
               </ul>
             </div>
+
             <div className="footer-column">
               <h4>Legal</h4>
               <ul>
-                <li><a href="#">Privacy Policy</a></li>
-                <li><a href="#">Terms of Service</a></li>
-                <li><a href="#">Licenses</a></li>
-                <li><a href="#">Security</a></li>
+                <li>
+                  <a href="#">Privacy Policy</a>
+                </li>
+                <li>
+                  <a href="#">Terms of Service</a>
+                </li>
+                <li>
+                  <a href="#">Licenses</a>
+                </li>
+                <li>
+                  <a href="#">Security</a>
+                </li>
               </ul>
             </div>
           </div>

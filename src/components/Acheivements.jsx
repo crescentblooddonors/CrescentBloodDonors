@@ -1,56 +1,75 @@
-import React from 'react';
+import React from "react";
 
 // Data for the services section
 const servicesData = [
   {
-    icon: 'fa-tint',
-    title: 'Blood Donation Drives',
-    color: 'text-red-500',
+    icon: "fa-car", // Changed icon to represent traffic/transportation
+    title: "Traffic Awareness Camp",
+    color: "text-blue-600", // Used a blue color for traffic theme
     description: [
-      'Organize regular blood donation camps in collaboration with hospitals and blood banks.',
-      'Respond to urgent blood requirements by connecting donors and recipients during life-threatening situations.',
+      "Launched the new academic year with an impactful Traffic Awareness Camp, led by the boys’ team, to promote road safety and social responsibility.",
+      "The campaign reminded commuters that “Every move behind the wheel matters — drive with care, choose responsibility.”",
+      "Participants engaged the public through interactive demonstrations, placards, and awareness talks under the guidance of the Traffic Police Department.",
+      "The initiative included a bilingual road safety pledge (Tamil & English), emphasizing the importance of helmets, seatbelts, sobriety, and first aid awareness through the Good Samaritan initiative.",
+    ],
+    stats: {
+      theme: "Road Safety", // New statistic to highlight the theme
+      collaboration: "Traffic Police",
+    },
+  },
+  {
+    icon: "fa-child", // Icon representing children/social event
+    title: "Children’s Day Out",
+    color: "text-green-500", // Used a green color for a joyful/compassion theme
+    description: [
+      "A heartfelt celebration of joy, learning, and compassion, reflecting CBD’s belief that kindness goes beyond blood donation.",
+      "The event brought together 75 children from three orphanages: Golden Heart Foundation, Nanthavanam Girls Shelter Home, and Rainbow Nest Boys Home.",
+      "The outing was successfully managed by 25 volunteers and 15 caretakers.",
+      "Activities included exploring the zoo, enjoying games, and sharing meals, all arranged by the CBD team.",
+    ],
+    stats: {
+      children: "75",
+      volunteers: "25",
+      locations: "3 Orphanages",
+    },
+  },
+  {
+    icon: "fa-trophy",
+    title: "Founder's Day Blood Donation Camp",
+    color: "text-red-600",
+    description: [
+      "A resounding success organized by Crescent Blood Donors (CBD) in collaboration with the BSA Crescent Alumni Association, Rajiv Gandhi Government General Hospital, and HDFC Bank.",
+      "The event recorded an impressive 450 registrations and 311 successful donations, showcasing the community’s strong spirit of volunteerism.",
+      "This milestone reaffirmed the institute’s unwavering commitment to humanitarian service and community welfare.",
+    ],
+    stats: {
+      registrations: "450",
+      donations: "311",
+    },
+  },
+  {
+    icon: "fa-utensils",
+    title: "Food Donation Drives",
+    color: "text-orange-500",
+    description: [
+      "Organize food distribution programs to provide meals for underprivileged individuals, especially during festivals and community events.",
     ],
   },
   {
-    icon: 'fa-bullhorn',
-    title: 'Awareness Campaigns',
-    color: 'text-blue-500',
+    icon: "fa-hands-helping",
+    title: "Social Service Activities",
+    color: "text-purple-500",
     description: [
-      'Conduct workshops and educational programs to spread awareness about the importance of blood donation.',
-      'Dispel myths and provide accurate information to remove barriers to donation.',
+      "Host traffic awareness campaigns to promote road safety and responsible behavior.",
+      "Celebrate national and special days with events aimed at social upliftment.",
     ],
   },
   {
-    icon: 'fa-pencil-alt',
-    title: 'Scribe Writing Services',
-    color: 'text-green-500',
+    icon: "fa-users",
+    title: "Community Building",
+    color: "text-teal-500",
     description: [
-      'Support visually impaired and differently-abled students by volunteering as scribes during their examinations.',
-    ],
-  },
-  {
-    icon: 'fa-utensils',
-    title: 'Food Donation Drives',
-    color: 'text-orange-500',
-    description: [
-      'Organize food distribution programs to provide meals for underprivileged individuals, especially during festivals and community events.',
-    ],
-  },
-  {
-    icon: 'fa-hands-helping',
-    title: 'Social Service Activities',
-    color: 'text-purple-500',
-    description: [
-      'Host traffic awareness campaigns to promote road safety and responsible behavior.',
-      'Celebrate national and special days with events aimed at social upliftment.',
-    ],
-  },
-  {
-    icon: 'fa-users',
-    title: 'Community Building',
-    color: 'text-teal-500',
-    description: [
-      'Encourage students to take active roles in social initiatives, building a strong network of changemakers.',
+      "Encourage students to take active roles in social initiatives, building a strong network of changemakers.",
     ],
   },
 ];
@@ -80,7 +99,8 @@ const OurServices = () => {
             What We Do
           </h2>
           <p className="mt-4 text-lg text-gray-600 max-w-2xl mx-auto">
-            Our initiatives are focused on creating a positive impact in the community through various service-oriented activities.
+            Our initiatives are focused on creating a positive impact in the
+            community through various service-oriented activities.
           </p>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -94,5 +114,3 @@ const OurServices = () => {
 };
 
 export default OurServices;
-
-
