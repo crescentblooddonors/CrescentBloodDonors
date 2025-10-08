@@ -1,4 +1,6 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { api } from '../config/Url';
+import { useCookies } from 'react-cookie';
 
 // --- SVG Icons (for a polished, self-contained component) ---
 const BackIcon = () => (
@@ -23,17 +25,33 @@ const HeartIcon = ({ className = "w-6 h-6" }) => (
   </svg>
 );
 
+const formatDate = (dateString) => new Date(dateString).toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' });
+
+
 // --- Main Component ---
 function BloodNeedDetails({needData,handleBack}) {
   const [selectedDonor, setSelectedDonor] = useState(null);
-
+  const [cookie] = useCookies()
+  const [donorSuccess,setDonorSuccess] = useState(false)
   const handleConfirmClick = (donor) => {
     setSelectedDonor(donor);
   };
   
-  const handleConfirmAction = () => {
+  const handleConfirmAction = async () => {
     if (selectedDonor) {
-      console.log("Confirming donor:", selectedDonor);
+      console.log("Confirming donor:", selectedDonor.donorId, needData);
+
+      await api.post("/recipients/confirm-donor",{
+        recipientId:needData._id,
+        donorId:selectedDonor.donorId
+      },{
+        headers:{
+            Authorization:`Bearer ${cookie.sessionToken}`
+        }
+      })
+      
+      setSelectedDonor(prev=>({...prev,confirmed:true}))
+      setDonorSuccess(true)
       // In a real app, you would make an API call here.
       // Upon success, you might want to update the status.
       //setNeedData(prevData => ({ ...prevData, status: `Confirmed: ${selectedDonor.donorName}` }));
@@ -41,14 +59,21 @@ function BloodNeedDetails({needData,handleBack}) {
     }
   };
   
-  const handleCloseNeed = () => {
+  const handleCloseNeed = async () => {
       console.log("Closing need with ID:", needData._id);
       // API call to update the need's status to 'Closed'
+      
+      const res = await api.post('/recipients/complete',{
+        recipientId : needData._id
+      },{
+        headers:{
+            Authorization:`Bearer ${cookie.sessionToken}`
+        }
+      })
       alert("This need has been marked as closed.");
   }
   
   // Helper to format date strings
-  const formatDate = (dateString) => new Date(dateString).toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' });
 
   // Helper to determine severity color
   const getSeverityColor = (severity) => {
@@ -118,17 +143,7 @@ function BloodNeedDetails({needData,handleBack}) {
                   <div className="space-y-4">
                     {needData.interestedDonors.length > 0 ? (
                       needData.interestedDonors.map(donor => (
-                        <div key={donor._id} className="bg-gray-50 p-4 rounded-lg border border-gray-200">
-                          <p className="font-bold text-gray-800">{donor.donorName}</p>
-                          <p className="text-sm text-gray-500">{donor.donorEmail}</p>
-                          <p className="text-xs text-gray-400 mt-1">Responded: {formatDate(donor.respondedAt)}</p>
-                          <button 
-                            onClick={() => handleConfirmClick(donor)}
-                            className="w-full mt-3 px-4 py-2 bg-green-500 text-white text-sm font-semibold rounded-lg hover:bg-green-600 transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
-                          >
-                            Confirm Donor
-                          </button>
-                        </div>
+                        <DonorDetail donor={donor} handleConfirmClick={handleConfirmClick} />
                       ))
                     ) : (
                       <p className="text-center text-gray-500 py-4">No interested donors yet.</p>
@@ -142,9 +157,10 @@ function BloodNeedDetails({needData,handleBack}) {
             <div className="mt-10 pt-6 border-t border-gray-200 flex justify-end">
                 <button 
                     onClick={handleCloseNeed}
-                    className="px-8 py-3 bg-red-600 text-white font-bold rounded-lg shadow-md hover:bg-red-700 transition-transform transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
+                    disabled = {needData.status == 'Completed'}
+                    className="px-8 py-3 bg-red-600 text-white font-bold rounded-lg shadow-md hover:bg-red-700 transition-transform transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 disabled:bg-gray-400"
                 >
-                    Close This Need
+                    {needData.status == 'Completed'?'Need Closed' : 'Close This Need'}
                 </button>
             </div>
           </div>
@@ -195,12 +211,51 @@ const DetailCard = ({ icon, title, children }) => (
 );
 
 const InfoRow = ({ label, value, highlight = false }) => (
-  <div>
-    <p className="text-sm font-medium text-gray-500">{label}</p>
+  <div className='flex flex-col lg:flex-row align-center'>
+    <p className="text-sm font-medium text-gray-500 mr-2">{label}</p>
     <p className={`text-base font-semibold ${highlight ? 'text-red-600' : 'text-gray-800'}`}>
       {value}
     </p>
   </div>
 );
+
+function DonorDetail({donor,handleConfirmClick,donorSuccess}) {
+  const [donorDetails,setDonorDetails] = useState(null)
+  const [isLoading,setIsLoading] = useState(true)
+  const [cookie,] = useCookies()
+  const [donorConfirmation,setDonorConfirmation] = useState(false)
+  useEffect(()=>{
+    const getDonorDetails = async ()=>{
+        setDonorConfirmation(donor.confirmed)
+        setIsLoading(true)
+        const response = await api.get(`/donors/${donor._id}`,{
+            headers:{Authorization:`Bearer ${cookie.sessionToken}`}
+        })
+        setDonorDetails(response.data)
+        setIsLoading(false)
+    }
+    getDonorDetails()
+  },[donor])
+
+  
+  return (
+        <div key={donor._id} className="bg-gray-50 p-4 rounded-lg border border-gray-200">
+            <p className="font-bold text-gray-800">{donor.donorName}</p>
+            <p className="text-sm text-gray-500">{donor.donorEmail}</p>
+            <p className="text-xs text-gray-400 mt-1">Responded: {formatDate(donor.respondedAt)}</p>
+            <button 
+                onClick={() => {
+                    handleConfirmClick(donor)
+                    setDonorConfirmation(true)
+                }}
+                disabled={donorConfirmation}
+                className="w-full mt-3 px-4 py-2 bg-green-500 text-white text-sm font-semibold rounded-lg hover:bg-green-600 transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 disabled:bg-gray-500"
+            >
+                {donorConfirmation? "Confirmed" :'Confirm Donor'}
+            </button>
+        </div>
+  )
+}
+
 
 export default BloodNeedDetails;

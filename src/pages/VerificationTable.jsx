@@ -94,11 +94,11 @@ const RecipientsView = ({ data, onVerify }) => {
         </button>
     );
 
-    const StatusBadge = ({ verified }) => (
+    const StatusBadge = ({ verified, children }) => (
         <span className={`px-2.5 py-0.5 inline-flex text-xs leading-5 font-semibold rounded-full ${
             verified ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'
         }`}>
-            {verified ? 'Verified' : 'Not Verified'}
+            {children}
         </span>
     );
     
@@ -162,7 +162,7 @@ const RecipientsView = ({ data, onVerify }) => {
                                 <td className="p-4 whitespace-nowrap text-sm text-gray-700">{`${item.city}, ${item.state}`}</td>
                                 <td className="p-4 whitespace-nowrap text-sm text-gray-700">{item.urgency}</td>
                                 <td className="p-4 whitespace-nowrap text-sm text-gray-700">{`${item.severity}%`}</td>
-                                <td className="p-4 whitespace-nowrap text-sm text-gray-700"><StatusBadge verified={item.verification} /></td>
+                                <td className="p-4 whitespace-nowrap text-sm text-gray-700"><StatusBadge verified={item.verification}>{item.status}</StatusBadge></td>
                                 <td className="p-4 whitespace-nowrap text-sm text-gray-700"><VerifyButton item={item} /></td>
                             </tr>
                         )) : (
@@ -260,8 +260,9 @@ const DonorsView = ({ data, onVerify }) => {
                             {sortableHeader('Blood Group', 'bloodGroup')}
                             {sortableHeader('Location', 'city')}
                             {sortableHeader('Last Donated', 'lastDonated')}
-                            {sortableHeader('Status', 'verified')}
-                            <th className="p-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Actions</th>
+                            <th className="p-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Gender</th>
+                            <th className="p-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Mobile</th>
+
                         </tr>
                     </thead>
                     <tbody className="divide-y divide-gray-200">
@@ -270,9 +271,9 @@ const DonorsView = ({ data, onVerify }) => {
                                 <td className="p-4 whitespace-nowrap text-sm text-gray-800 font-medium">{item.name}</td>
                                 <td className="p-4 whitespace-nowrap text-sm text-gray-700"><span className="font-mono text-[#153F76] font-bold">{item.bloodGroup}</span></td>
                                 <td className="p-4 whitespace-nowrap text-sm text-gray-700">{`${item.city}, ${item.state}`}</td>
-                                <td className="p-4 whitespace-nowrap text-sm text-gray-700">{new Date(item.lastDonated).toLocaleDateString()}</td>
-                                <td className="p-4 whitespace-nowrap text-sm text-gray-700"><StatusBadge verified={item.verified} /></td>
-                                <td className="p-4 whitespace-nowrap text-sm text-gray-700"><VerifyButton item={item} /></td>
+                                <td className="p-4 whitespace-nowrap text-sm text-gray-700">{new Date(item.lastDonationDate).toLocaleDateString()}</td>
+                                <td className="p-4 whitespace-nowrap text-sm text-gray-700">{item.gender}</td>
+                                <td className="p-4 whitespace-nowrap text-sm text-gray-700">{item.mobileNumber}</td>
                             </tr>
                         )) : (
                              <tr><td colSpan="6" className="text-center p-6 text-gray-500">No records found.</td></tr>
