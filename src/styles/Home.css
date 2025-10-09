@@ -26,9 +26,9 @@
 /* Top Right Blob/Shape */
 .top-right-blob {
   top: 0;
-  right: -39px;
-  width: 300px;
-  height: 300px;
+  right: 0px;
+  /* width: 300px;
+  height: 300px; */
   /* Creating the subtle, wavy red/white shape using a radial gradient */
   background: radial-gradient(
     circle at top right,

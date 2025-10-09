@@ -93,7 +93,7 @@ const ServiceCard = ({ icon, title, description, color }) => (
 const OurServices = () => {
   return (
     <section className="bg-gray-50 py-16 sm:py-20 font-poppins">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-12">
           <h2 className="text-3xl sm:text-4xl font-black text-dark-blue uppercase">
             What We Do

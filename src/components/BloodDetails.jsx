@@ -85,7 +85,7 @@ function BloodNeedDetails({needData,handleBack}) {
 
   return (
     <div className="bg-gray-100 min-h-screen font-sans">
-      <div className="container mx-auto p-4 sm:p-6 lg:p-8 min-w-full">
+      <div className="container mx-auto p-1 sm:p-6 lg:p-8 min-w-full">
         {/* --- Back Button --- */}
         <button className="inline-flex items-center text-gray-600 hover:text-gray-900 transition-colors mb-4" onClick={handleBack}>
           <BackIcon />
@@ -93,7 +93,7 @@ function BloodNeedDetails({needData,handleBack}) {
         </button>
 
         <div className="bg-white rounded-2xl shadow-xl overflow-hidden min-w-full">
-          <div className="p-6 md:p-8">
+          <div className="p-2 md:p-8">
 
             {/* --- Patient Header --- */}
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6">
@@ -211,9 +211,9 @@ const DetailCard = ({ icon, title, children }) => (
 );
 
 const InfoRow = ({ label, value, highlight = false }) => (
-  <div className='flex flex-col lg:flex-row align-center'>
-    <p className="text-sm font-medium text-gray-500 mr-2">{label}</p>
-    <p className={`text-base font-semibold ${highlight ? 'text-red-600' : 'text-gray-800'}`}>
+  <div className='flex flex-row items-center justify-start'>
+    <p className="text-xs font-medium text-gray-500 mr-2">{label}</p>
+    <p className={`font-semibold ${highlight ? 'text-red-600' : 'text-gray-800'}`}>
       {value}
     </p>
   </div>
@@ -228,10 +228,10 @@ function DonorDetail({donor,handleConfirmClick,donorSuccess}) {
     const getDonorDetails = async ()=>{
         setDonorConfirmation(donor.confirmed)
         setIsLoading(true)
-        const response = await api.get(`/donors/${donor._id}`,{
+        const response = await api.get(`/donors/${donor.donorId}`,{
             headers:{Authorization:`Bearer ${cookie.sessionToken}`}
         })
-        setDonorDetails(response.data)
+        setDonorDetails(response.data.data)
         setIsLoading(false)
     }
     getDonorDetails()
@@ -240,8 +240,10 @@ function DonorDetail({donor,handleConfirmClick,donorSuccess}) {
   
   return (
         <div key={donor._id} className="bg-gray-50 p-4 rounded-lg border border-gray-200">
-            <p className="font-bold text-gray-800">{donor.donorName}</p>
-            <p className="text-sm text-gray-500">{donor.donorEmail}</p>
+            <p className="text-xs font-bold text-gray-800">{donor.donorName}</p>
+            <p className="text-xs text-gray-500">{donor.donorEmail}</p>
+            <p className="text-xs text-gray-500">Contact: {donorDetails.mobileNumber}</p>
+            <p className="text-xs text-gray-500">Date of Birth: {formatDate(donorDetails.dateOfBirth)}</p>
             <p className="text-xs text-gray-400 mt-1">Responded: {formatDate(donor.respondedAt)}</p>
             <button 
                 onClick={() => {

@@ -1,21 +1,32 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import VerificationTable from './VerificationTable';
 import ProfileEditPage from '../components/Profile';
+import { useCookies } from 'react-cookie';
+import { useNavigate } from 'react-router-dom';
+import Logo from '../assets/images.png'
 
 // --- Placeholder Components (same as before) ---
 const Dashboard = () => (
   <div>
     <h1 className="text-3xl font-bold text-gray-800">Dashboard</h1>
-    <p className="mt-4 text-gray-600">Welcome to your dashboard. Key metrics and summaries will be shown here.</p>
+    <p className="mt-4 text-gray-600">Dashboard will be coming soon. Key metrics and summaries will be shown here.</p>
   </div>
 );
-
+ 
 
 
 function AdminPanel() {
-  const [activePage, setActivePage] = useState('dashboard');
+  const [activePage, setActivePage] = useState('verification');
   const [isSidebarOpen, setSidebarOpen] = useState(false); // State for mobile sidebar
+  const [cookie,setCookie,removeCookie] = useCookies()
 
+  useEffect(()=>{
+    if(!cookie.sessionToken){
+      navigate('/auth')
+    }
+  },[])
+  
+  let navigate = useNavigate()
   const renderPage = () => {
     switch (activePage) {
       case 'dashboard':
@@ -25,7 +36,7 @@ function AdminPanel() {
       case 'profile':
         return <ProfileEditPage />;
       default:
-        return <Dashboard />;
+        return <VerificationTable />;
     }
   };
   
@@ -63,7 +74,8 @@ function AdminPanel() {
         transition-transform duration-300 ease-in-out
       `}>
         <div className="flex items-center justify-between">
-            <h2 className="text-2xl font-bold">My App</h2>
+            <img className='rounded-full w-10' src={Logo} alt="" />
+            <h2 className="text-2xl font-bold">CBD</h2>
             {/* Close button (mobile only) */}
             <button onClick={() => setSidebarOpen(false)} className="md:hidden p-1">
                 <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -72,7 +84,7 @@ function AdminPanel() {
             </button>
         </div>
         
-        <nav className="mt-10 flex flex-col space-y-2">
+        <nav className="h-screen mt-10 flex flex-col space-y-2">
           <button onClick={() => handleNavClick('dashboard')} className={getNavClasses('dashboard')}>
             Dashboard
           </button>
@@ -81,6 +93,10 @@ function AdminPanel() {
           </button>
           <button onClick={() => handleNavClick('profile')} className={getNavClasses('profile')}>
             Profile
+          </button>
+
+          <button className='bg-gray-700 pt-3 rounded-md flex justify-center items-center' onClick={()=>{removeCookie('sessionToken');navigate('/auth')}}>
+            Logout
           </button>
         </nav>
       </aside>

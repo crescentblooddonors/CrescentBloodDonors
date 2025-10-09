@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Logo from '../assets/images.png'
 import { api } from '../config/Url';
 import { useCookies } from 'react-cookie';
@@ -10,6 +10,12 @@ const AdminAuthPage = () => {
   const [error, setError] = useState('');
   const [cookie,setCookie] = useCookies()
   let navigate = useNavigate()
+
+  useEffect(()=>{
+    if(cookie.sessionToken){
+      navigate('/admin')
+    }
+  },[cookie])
 
   const handleLogin = async (e) => {
     e.preventDefault();

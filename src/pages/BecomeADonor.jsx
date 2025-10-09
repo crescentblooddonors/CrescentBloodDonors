@@ -27,7 +27,7 @@ const BecomeADonor = () => {
     city:'',
     pincode:'',
     urgency:'',
-    addressLine:'23, Jailania'
+    addressLine:''
   });
 
   const [needData,setNeedData] = useState({
@@ -187,6 +187,7 @@ const BecomeADonor = () => {
               <DateInputWithPlaceholder name="lastDonationDate" type="date" placeholder="Last Donation Date" value={formData.lastDonationDate} onChange={handleChange} />
               <Input name="mobileNumber" type="tel" placeholder="Mobile No" value={formData.mobileNumber} onChange={handleChange} required />
               <Input name="email" type="email" placeholder="Email ID" value={formData.email} onChange={handleChange} required />
+              <Input name="addressLine" placeholder="AddressLine" value={formData.addressLine} onChange={handleChange} required />
               <Input name="state" placeholder="State" value={formData.state} onChange={handleChange} required />
               <Input name="city" placeholder="City" value={formData.city} onChange={handleChange} required />            
               <Input name="pincode" placeholder="Pincode" value={formData.pincode} onChange={handleChange} required />          
@@ -207,12 +208,17 @@ const BecomeADonor = () => {
                         <Input name="bloodGroupUnits" type="number" placeholder="Units" value={needData.bloodGroupUnits} onChange={handleChange} required />
                         <Input name="causeOfNeed" placeholder="cause of need" value={needData.causeOfNeed} onChange={handleChange} required />
                         <Input name="hospitalName" type="text" placeholder="Hospital Name" value={needData.hospitalName} onChange={handleChange} required />
+                        <Select name="urgency" id="Urgency" label='Urgency' placeholder="Urgency" options={[
+                          {value:'Slow',label:'More than 2 days'},
+                          {value:'Emergency',label:'Emergency'},
+                          {value:'Immediate',label:'Immediate'},
+                        ]} value={needData.urgency} onChange={handleChange} required />
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <Input name="state" placeholder="State" value={needData.state} onChange={handleChange} required />
                             <Input name="city" placeholder="City" value={needData.city} onChange={handleChange} required />
                         </div>
                          <Input name="zipCode" placeholder="Pincode" value={needData.zipCode} onChange={handleChange} required />
-                         <Slider label="Urgency" id='severity' name='severity' value={needData.severity} onChange={handleChange}/>
+                         <Slider label="Severity" id='severity' name='severity' value={needData.severity} onChange={handleChange}/>
                     </div>
                 </div>     
             }

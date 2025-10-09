@@ -1,4 +1,7 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { useCookies } from 'react-cookie';
+import { api } from '../config/Url';
+import Kaasim from '../assets/kaasim.jpg'
 
 // A simple camera icon component for the profile picture button
 const CameraIcon = () => (
@@ -10,13 +13,15 @@ const CameraIcon = () => (
 function ProfileEditPage() {
   // State for user profile data (pre-filled with dummy data)
   const [profileData, setProfileData] = useState({
-    name: 'Karthik Raja',
-    position: 'Lead Developer',
-    mobile: '9876543210',
-    rrn: 'RN1234567890',
-    profilePic: 'https://via.placeholder.com/150' // Default profile picture URL
+    name: '',
+    position: '',
+    mobile: '',
+    rrn: '',
+    image: 'https://via.placeholder.com/150' // Default profile picture URL
   });
 
+  const [cookie] = useCookies()
+  const [err,setErr] = useState('')
   // State for password fields
   const [passwordData, setPasswordData] = useState({
     currentPassword: '',
@@ -45,19 +50,44 @@ function ProfileEditPage() {
       const file = e.target.files[0];
       // Create a URL for the selected file to use as a preview
       setProfilePicPreview(URL.createObjectURL(file));
+      setProfileData(prev=>({...prev,new:e.target.files[0]}))
       // In a real app, you would also prepare this 'file' object for upload
     }
   };
 
   // Handler for form submission
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     // TODO: Add validation logic here (e.g., check if new passwords match)
     console.log("Submitting Profile Data:", profileData);
-    console.log("Submitting Password Data:", passwordData);
+    const formData = new FormData();
+
+    // 2. Append all your text data to it
+    formData.append('name', profileData.name);
+    formData.append('position', profileData.position);
+    formData.append('mobile', profileData.mobile);
+    formData.append('rrn', profileData.rrn);
+    if(profileData.new) formData.append('image', profileData.new);
+    
+    const res = await api.put('/admin/update-admin',formData,{
+      headers:{
+        Authorization:`Bearer ${cookie.sessionToken}`
+      }
+    })
+    if(res.status.success){
+      alert("Profile saved successfully! (Check console for data)");
+    }
     // In a real application, you would make API calls here to update the user's data
-    alert("Profile saved successfully! (Check console for data)");
   };
+
+  useEffect(()=>{
+    const getData = async ()=>{
+      const res = await api.get('/admin',{headers:{Authorization:`Bearer ${cookie.sessionToken}`}})
+      setProfileData(prev=>({...prev,...res.data.data}))
+    }
+
+    getData()
+  },[])
 
   return (
     <div className="bg-gray-100 min-h-screen p-4 sm:p-6 lg:p-8">
@@ -68,7 +98,7 @@ function ProfileEditPage() {
           {/* --- Profile Picture Section --- */}
           <div className="flex flex-col items-center space-y-4 mb-10">
             <img 
-              src={profilePicPreview || profileData.profilePic} 
+              src={profilePicPreview || profileData.image} 
               alt="Profile"
               className="w-32 h-32 rounded-full object-cover border-4 border-gray-200"
             />
@@ -126,7 +156,30 @@ function ProfileEditPage() {
                   <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-600 mb-1">Confirm New Password</label>
                   <input type="password" name="confirmPassword" id="confirmPassword" value={passwordData.confirmPassword} onChange={handlePasswordChange} className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" placeholder="••••••••" />
               </div>
-            </div>
+            </div> 
+            {err&&<p className='text-red-500'>{err}</p>}
+            <button 
+              type='button'
+              className="mt-2 px-6 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:bg-gray-500  disabled:cursor-not-allowed" 
+              disabled={!(passwordData.confirmPassword===passwordData.newPassword)} 
+              onClick={async ()=>{
+                try{
+                  setErr('')
+                  const res = await api.put('/admin/update-password',passwordData,{
+                    headers:{
+                      Authorization:`Bearer ${cookie.sessionToken}`
+                    }
+                  })
+                  if(res.data.success){
+                    alert("password updated successfully")
+                  }
+                }catch (e){
+                  setErr(e.response.data.message)
+                }
+              }}
+              >
+              Update Password
+            </button>
           </div>
 
           {/* --- Action Buttons --- */}

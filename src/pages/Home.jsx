@@ -1,9 +1,13 @@
 import React, { useState } from "react";
 import "../styles/Home.css";
 import OurServices from "../components/Acheivements";
+import { useNavigate } from "react-router-dom";
+import Kaasim from '../assets/kaasim.jpg'
+import Irfaan from '../assets/irfaan.jpg'
 
 const Home = () => {
   const [isNavOpen, setIsNavOpen] = useState(false);
+  let navigate = useNavigate()
 
   // Team member data
   const teamMembers = [
@@ -12,7 +16,7 @@ const Home = () => {
       name: "Mohammed Kasim",
       role: "President",
       bio: "Oversees the club's vision and impact. Leads strategic partnerships with hospitals and drives community engagement to ensure a steady, reliable donor base.",
-      img: "/assets/ui-face.jpg",
+      img: Kaasim,
       social: {
         facebook: "#",
         twitter: "#",
@@ -38,7 +42,7 @@ const Home = () => {
       name: "Mohammed Irfan",
       role: "Joint Secretary",
       bio: "Focuses on organizing blood drives and awareness campaigns. Connects with new volunteers and handles all public communications.",
-      img: "/assets/ui-face.jpg",
+      img: Irfaan,
       social: {
         facebook: "#",
         twitter: "#",
@@ -62,6 +66,7 @@ const Home = () => {
         <div className="logo-container">
           <div className="logo-circle">
             <img
+              className="rounded-full"
               src="/assets/cbd-logo.png"
               alt="cbd-logo"
               height="80px"
@@ -105,10 +110,10 @@ const Home = () => {
             Connecting donors with those in need instantly
           </p>
           <div className="cta-buttons">
-            <a href="#" className="btn btn-primary">
+            <a href="/donate" className="btn btn-primary">
               Become a Donor
             </a>
-            <a href="#" className="btn btn-secondary">
+            <a href="/donate" className="btn btn-secondary">
               Need Blood
             </a>
           </div>
@@ -273,7 +278,7 @@ const Home = () => {
                 Have you been helped by our blood donation network? We'd love to
                 hear your story and inspire others.
               </p>
-              <a href="#" className="submit-testimonial-link">
+              <a href="https://forms.gle/YrNsgGQ4M1hV8W3W8" className="submit-testimonial-link" target="blank">
                 Submit Your Testimonial &rarr;
               </a>
             </div>
