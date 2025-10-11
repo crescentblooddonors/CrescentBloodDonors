@@ -33,9 +33,14 @@ function BloodNeedDetails({needData,handleBack}) {
   const [selectedDonor, setSelectedDonor] = useState(null);
   const [cookie] = useCookies()
   const [donorSuccess,setDonorSuccess] = useState(false)
+  const [isVerified,setIsVerified] = useState(false)
   const handleConfirmClick = (donor) => {
     setSelectedDonor(donor);
   };
+
+  useEffect(()=>{
+    setIsVerified(needData.verification)
+  },[])
   
   const handleConfirmAction = async () => {
     if (selectedDonor) {
@@ -82,6 +87,21 @@ function BloodNeedDetails({needData,handleBack}) {
       if (s > 50) return 'from-orange-500 to-yellow-500';
       return 'from-yellow-500 to-green-500';
   }
+
+
+  const handleVerify = async (id) => {
+          try {
+            await api.put(`/recipients/verify-recipient-request/${id}`, {}, {
+              headers: { Authorization: `Bearer ${cookies.sessionToken}` }
+            });
+            
+            setIsVerified(true)
+          } catch (err) {
+            console.error("Failed to verify recipient:", err);
+            alert("Could not verify the entry. Please try again.");
+          }
+        // Handle donor verification similarly
+    };
 
   return (
     <div className="bg-gray-100 min-h-screen font-sans">
@@ -155,13 +175,19 @@ function BloodNeedDetails({needData,handleBack}) {
             
             {/* --- Action Footer --- */}
             <div className="mt-10 pt-6 border-t border-gray-200 flex justify-end">
-                <button 
+                {isVerified?<button 
                     onClick={handleCloseNeed}
                     disabled = {needData.status == 'Completed'}
                     className="px-8 py-3 bg-red-600 text-white font-bold rounded-lg shadow-md hover:bg-red-700 transition-transform transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 disabled:bg-gray-400"
                 >
                     {needData.status == 'Completed'?'Need Closed' : 'Close This Need'}
-                </button>
+                </button>:<button 
+                    onClick={()=>handleVerify(needData._id)}
+                    disabled = {needData.status == 'Completed'}
+                    className="px-8 py-3 bg-red-600 text-white font-bold rounded-lg shadow-md hover:bg-red-700 transition-transform transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 disabled:bg-gray-400"
+                >
+                    Verify
+                </button>}
             </div>
           </div>
         </div>
