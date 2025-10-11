@@ -73,6 +73,43 @@ const useTableManager = (initialData) => {
     return { sortedAndFilteredData, requestSort, handleFilterChange, sortConfig };
 };
 
+
+
+
+const VerifyButton = ({ item }) => {
+    const [isVerified,setIsVerified] = useState(false)
+    const [cookies] = useCookies()
+    useEffect(()=>{
+        setIsVerified(item.verification)
+    },[])
+
+
+     const handleVerify = async (id) => {
+          try {
+            await api.put(`/recipients/verify-recipient-request/${id}`, {}, {
+              headers: { Authorization: `Bearer ${cookies.sessionToken}` }
+            });
+            
+            setIsVerified(true)
+          } catch (err) {
+            console.error("Failed to verify recipient:", err);
+            alert("Could not verify the entry. Please try again.");
+          }
+        // Handle donor verification similarly
+    };
+     return <button
+        onClick={() => handleVerify(item._id)} // Using _id assuming MongoDB
+        disabled={isVerified}
+        className={`w-full md:w-auto px-4 py-2 text-sm font-medium rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 transition-colors duration-200 ${
+            isVerified
+                    ? 'bg-gray-200 text-gray-500 cursor-not-allowed'
+                    : 'bg-[#153F76] text-white hover:bg-red-700 focus:ring-[#153F76]'
+        }`}
+    >
+        {isVerified ? 'Verified' : 'Verify'}
+    </button>
+};
+
 // --- Recipients View Component ---
 const RecipientsView = ({ data, onVerify }) => {
     const { sortedAndFilteredData, requestSort, handleFilterChange, sortConfig } = useTableManager(data);
@@ -80,19 +117,7 @@ const RecipientsView = ({ data, onVerify }) => {
     const commonSelectClasses = "w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-[#153F76] focus:border-[#153F76]";
     const [showDetail,setShowDetail] = useState(false)
     const [selectedNeed,setSelectedNeed] = useState(null)
-    const VerifyButton = ({ item }) => (
-         <button
-            onClick={() => onVerify(item._id)} // Using _id assuming MongoDB
-            disabled={item.verification}
-            className={`w-full md:w-auto px-4 py-2 text-sm font-medium rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 transition-colors duration-200 ${
-                item.verification
-                    ? 'bg-gray-200 text-gray-500 cursor-not-allowed'
-                    : 'bg-[#153F76] text-white hover:bg-red-700 focus:ring-[#153F76]'
-            }`}
-        >
-            {item.verification ? 'Verified' : 'Verify'}
-        </button>
-    );
+
 
     const StatusBadge = ({ verified, children }) => (
         <span className={`px-2.5 py-0.5 inline-flex text-xs leading-5 font-semibold rounded-full ${
@@ -128,7 +153,24 @@ const RecipientsView = ({ data, onVerify }) => {
                 </select>
                 <select onChange={e => handleFilterChange('bloodGroup', e.target.value)} className={commonSelectClasses}>
                     <option value="">All Blood Groups</option>
-                    <option value="A+">A+</option><option value="A-">A-</option><option value="B+">B+</option><option value="B-">B-</option><option value="AB+">AB+</option><option value="AB-">AB-</option><option value="O+">O+</option><option value="O-">O-</option>
+                    <option value="A+">A+</option>
+                    <option value="A-">A-</option>
+                    <option value="A1+">A1+</option>
+                    <option value="A1-">A1-</option>
+                    <option value="A2+">A2+</option>
+                    <option value="A2-">A2-</option>
+                    <option value="B+">B+</option>
+                    <option value="B-">B-</option>
+                    <option value="AB+">AB+</option>
+                    <option value="AB-">AB-</option>
+                    <option value="AB+">A1B+</option>
+                    <option value="AB-">A1B-</option>
+                    <option value="AB+">A2B+</option>
+                    <option value="AB-">A2B-</option>
+                    <option value="O+">O+</option>
+                    <option value="O-">O-</option>
+                    <option value="INRA">INRA</option>
+                    <option value="Bombay Blood Group">Bombay Blood</option>
                 </select>
                 <select onChange={e => handleFilterChange('verification', e.target.value)} className={commonSelectClasses}>
                     <option value="">All Statuses</option>
@@ -153,11 +195,13 @@ const RecipientsView = ({ data, onVerify }) => {
                     </thead>
                     <tbody className="divide-y divide-gray-200">
                         {sortedAndFilteredData.length > 0 ? sortedAndFilteredData.map((item) => (
-                            <tr key={item._id} className="hover:bg-slate-50" onClick={()=>{
+                            <tr key={item._id} className="hover:bg-slate-50">
+                                <td className="p-4 whitespace-nowrap text-sm text-gray-800 font-medium" >
+                                    <p onClick={()=>{
                                 setSelectedNeed(item);
                                 setShowDetail(true)
-                            }}>
-                                <td className="p-4 whitespace-nowrap text-sm text-gray-800 font-medium">{item.name}</td>
+                            }}>{item.name}</p>
+                                </td>
                                 <td className="p-4 whitespace-nowrap text-sm text-gray-700"><span className="font-mono text-[#153F76] font-bold">{item.bloodGroup}</span></td>
                                 <td className="p-4 whitespace-nowrap text-sm text-gray-700">{`${item.city}, ${item.state}`}</td>
                                 <td className="p-4 whitespace-nowrap text-sm text-gray-700">{item.urgency}</td>
@@ -177,7 +221,10 @@ const RecipientsView = ({ data, onVerify }) => {
                 {sortedAndFilteredData.length > 0 ? sortedAndFilteredData.map(item => (
                     <div key={item._id} className="bg-slate-50 p-4 rounded-lg shadow-md border border-gray-200 space-y-3">
                         <div className="flex justify-between items-start">
-                            <h3 className="font-bold text-lg text-slate-800">{item.name}</h3>
+                            <h3 className="font-bold text-lg text-slate-800" onClick={()=>{
+                                setSelectedNeed(item);
+                                setShowDetail(true)
+                            }}>{item.name}</h3>
                             <span className="font-mono text-xl text-[#153F76] font-bold">{item.bloodGroup}</span>
                         </div>
                         <div className="text-sm text-slate-600">
@@ -241,13 +288,25 @@ const DonorsView = ({ data, onVerify }) => {
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
                 <input type="text" placeholder="Filter by City/State..." onChange={e => handleFilterChange('location', e.target.value)} className={commonSelectClasses} />
                 <select onChange={e => handleFilterChange('bloodGroup', e.target.value)} className={commonSelectClasses}>
-                   <option value="">All Blood Groups</option>
-                    <option value="A+">A+</option><option value="A-">A-</option><option value="B+">B+</option><option value="B-">B-</option><option value="AB+">AB+</option><option value="AB-">AB-</option><option value="O+">O+</option><option value="O-">O-</option>
-                </select>
-                <select onChange={e => handleFilterChange('verified', e.target.value)} className={commonSelectClasses}>
-                    <option value="">All Statuses</option>
-                    <option value="true">Verified</option>
-                    <option value="false">Not Verified</option>
+                    <option value="">All Blood Groups</option>
+                    <option value="A+">A+</option>
+                    <option value="A-">A-</option>
+                    <option value="A1+">A1+</option>
+                    <option value="A1-">A1-</option>
+                    <option value="A2+">A2+</option>
+                    <option value="A2-">A2-</option>
+                    <option value="B+">B+</option>
+                    <option value="B-">B-</option>
+                    <option value="AB+">AB+</option>
+                    <option value="AB-">AB-</option>
+                    <option value="AB+">A1B+</option>
+                    <option value="AB-">A1B-</option>
+                    <option value="AB+">A2B+</option>
+                    <option value="AB-">A2B-</option>
+                    <option value="O+">O+</option>
+                    <option value="O-">O-</option>
+                    <option value="INRA">INRA</option>
+                    <option value="Bombay Blood Group">Bombay Blood</option>
                 </select>
             </div>
 
@@ -295,8 +354,8 @@ const DonorsView = ({ data, onVerify }) => {
                             <p><span className="font-semibold">Last Donated:</span> {new Date(item.lastDonated).toLocaleDateString()}</p>
                         </div>
                         <div className="flex justify-between items-center pt-2">
-                           <StatusBadge verified={item.verification} />
-                           <VerifyButton item={item} />
+                            <td className="p-4 whitespace-nowrap text-sm text-gray-700">Gender:{item.gender}</td>
+                            <td className="p-4 whitespace-nowrap text-sm text-gray-700">Mobile:{item.mobileNumber}</td>
                         </div>
                     </div>
                 )) : (
