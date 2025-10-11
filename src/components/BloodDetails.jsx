@@ -92,7 +92,7 @@ function BloodNeedDetails({needData,handleBack}) {
   const handleVerify = async (id) => {
           try {
             await api.put(`/recipients/verify-recipient-request/${id}`, {}, {
-              headers: { Authorization: `Bearer ${cookies.sessionToken}` }
+              headers: { Authorization: `Bearer ${cookie.sessionToken}` }
             });
             
             setIsVerified(true)
