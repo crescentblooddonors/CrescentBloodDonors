@@ -98,7 +98,7 @@ function ProfileEditPage() {
           {/* --- Profile Picture Section --- */}
           <div className="flex flex-col items-center space-y-4 mb-10">
             <img 
-              src={profilePicPreview || profileData.image} 
+              src={profilePicPreview || 'https://cbd-backend.onrender.com'+ profileData.image} 
               alt="Profile"
               className="w-32 h-32 rounded-full object-cover border-4 border-gray-200"
             />
