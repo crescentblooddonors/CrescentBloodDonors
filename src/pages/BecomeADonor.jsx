@@ -135,9 +135,14 @@ const BecomeADonor = () => {
 
   const bloodGroupOptions = [
     { value: 'A+', label: 'A+' }, { value: 'A-', label: 'A-' },
+    { value: 'A1+', label: 'A1+' }, { value: 'A1-', label: 'A1-' },
+    { value: 'A1B+', label: 'A1B+' }, { value: 'A1B-', label: 'A1B-' },
+    { value: 'A2+', label: 'A2+' }, { value: 'A2-', label: 'A2-' },
+    { value: 'A2B+', label: 'A2B+' }, { value: 'A2B-', label: 'A2B-' },
     { value: 'B+', label: 'B+' }, { value: 'B-', label: 'B-' },
     { value: 'AB+', label: 'AB+' }, { value: 'AB-', label: 'AB-' },
     { value: 'O+', label: 'O+' }, { value: 'O-', label: 'O-' },
+    { value: 'Bombay Blood', label: 'Bombay Blood' }, { value: 'INRA', label: 'INRA' },
   ];
 
   return (
@@ -199,7 +204,6 @@ const BecomeADonor = () => {
                         <Select name="gender" label="Gender" options={genderOptions} value={needData.gender} onChange={handleChange} required />  
                         <Input name="age" type="number" placeholder="Age" value={needData.age} onChange={handleChange} required />
                         <Select name="bloodGroup" id="Blood Group" label='Blood Group' placeholder="Blood Group" options={bloodGroupOptions} value={needData.bloodGroup} onChange={handleChange} required />
-                        <Input name="lastDonationDate" type="date" placeholder="Last Donation Date" value={needData.lastDonationDate} onChange={handleChange} />
                         <Input name="contact" type="tel" placeholder="Contact" value={needData.contact} onChange={handleChange} required />
                         <Input name="email" type="email" placeholder="Email ID" value={needData.email} onChange={handleChange} required />
                     </div>

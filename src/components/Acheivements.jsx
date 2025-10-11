@@ -84,7 +84,7 @@ const ServiceCard = ({ icon, title, description, color }) => (
     </div>
     <ul className="space-y-2 text-gray-600 list-disc list-inside flex-grow">
       {description.map((point, index) => (
-        <li key={index}>{point}</li>
+        <li key={index} className="text-justify">{point}</li>
       ))}
     </ul>
   </div>
@@ -93,7 +93,7 @@ const ServiceCard = ({ icon, title, description, color }) => (
 const OurServices = () => {
   return (
     <section className="bg-gray-50 py-16 sm:py-20 font-poppins">
-      <div className="mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="mx-auto px-4 sm:px-4 lg:px-3">
         <div className="text-center mb-12">
           <h2 className="text-3xl sm:text-4xl font-black text-dark-blue uppercase">
             What We Do

@@ -4,6 +4,7 @@ import OurServices from "../components/Acheivements";
 import { useNavigate } from "react-router-dom";
 import Kaasim from '../assets/kaasim.jpg'
 import Irfaan from '../assets/irfaan.jpg'
+import Asmila from '../assets/asmila.jpg'
 
 const Home = () => {
   const [isNavOpen, setIsNavOpen] = useState(false);
@@ -12,11 +13,11 @@ const Home = () => {
   // Team member data
   const teamMembers = [
     {
-      id: 1,
-      name: "Mohammed Kasim",
-      role: "President",
-      bio: "Oversees the club's vision and impact. Leads strategic partnerships with hospitals and drives community engagement to ensure a steady, reliable donor base.",
-      img: Kaasim,
+      id: 2,
+      name: "Asmila",
+      role: "Secretary",
+      bio: "Manages the critical logistics of blood requests, coordinates timely donor matching, and maintains the integrity of the donor database.",
+      img: Asmila,
       social: {
         facebook: "#",
         twitter: "#",
@@ -25,11 +26,11 @@ const Home = () => {
       },
     },
     {
-      id: 2,
-      name: "Asmila",
-      role: "Secretary",
-      bio: "Manages the critical logistics of blood requests, coordinates timely donor matching, and maintains the integrity of the donor database.",
-      img: "/assets/ui-face.jpg",
+      id: 1,
+      name: "Mohammed Kasim",
+      role: "President",
+      bio: "Oversees the club's vision and impact. Leads strategic partnerships with hospitals and drives community engagement to ensure a steady, reliable donor base.",
+      img: Kaasim,
       social: {
         facebook: "#",
         twitter: "#",
