@@ -242,8 +242,8 @@ function DonorDetail({donor,handleConfirmClick,donorSuccess}) {
         <div key={donor._id} className="bg-gray-50 p-4 rounded-lg border border-gray-200">
             <p className="text-xs font-bold text-gray-800">{donor.donorName}</p>
             <p className="text-xs text-gray-500">{donor.donorEmail}</p>
-            <p className="text-xs text-gray-500">Contact: {donorDetails.mobileNumber}</p>
-            <p className="text-xs text-gray-500">Date of Birth: {formatDate(donorDetails.dateOfBirth)}</p>
+            <p className="text-xs text-gray-500">Contact: {donorDetails?.mobileNumber}</p>
+            <p className="text-xs text-gray-500">Date of Birth: {formatDate(donorDetails?.dateOfBirth)}</p>
             <p className="text-xs text-gray-400 mt-1">Responded: {formatDate(donor.respondedAt)}</p>
             <button 
                 onClick={() => {
