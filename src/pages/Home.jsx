@@ -70,8 +70,8 @@ const Home = () => {
               className="rounded-full"
               src="/assets/cbd-logo.png"
               alt="cbd-logo"
-              height="80px"
-              width="80px"
+              height="100px"
+              width="100px"
             />
           </div>
         </div>
