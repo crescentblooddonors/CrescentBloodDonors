@@ -251,8 +251,72 @@ const Home = () => {
             </p>
 
             <div className="testimonials-grid">
-              {[1, 2, 3, 4, 5, 6].map((item) => (
+              <div className="card testimonial-card" key={item}>
+                  <div className="rating">
+                    <i className="fas fa-star"></i>
+                    <i className="fas fa-star"></i>
+                    <i className="fas fa-star"></i>
+                    <i className="fas fa-star"></i>
+                    <i className="fas fa-star"></i>
+                  </div>
+                  <p className="quote-text">
+                    "Thank you so much it was a great favour for me, Today it's quite stable"
+                  </p>
+                  <div className="reviewer">
+                    <div className="reviewer-avatar"></div>
+                    <p className="reviewer-name">Rabika</p>
+                  </div>
+                </div>
+
                 <div className="card testimonial-card" key={item}>
+                  <div className="rating">
+                    <i className="fas fa-star"></i>
+                    <i className="fas fa-star"></i>
+                    <i className="fas fa-star"></i>
+                    <i className="fas fa-star"></i>
+                    <i className="fas fa-star"></i>
+                  </div>
+                  <p className="quote-text">
+                    "Blood Received Sir..Thank you so much sir"
+                  </p>
+                  <div className="reviewer">
+                    <div className="reviewer-avatar"></div>
+                    <p className="reviewer-name">Prema V</p>
+                  </div>
+                </div>
+                <div className="card testimonial-card" key={item}>
+                  <div className="rating">
+                    <i className="fas fa-star"></i>
+                    <i className="fas fa-star"></i>
+                    <i className="fas fa-star"></i>
+                    <i className="fas fa-star"></i>
+                    <i className="fas fa-star"></i>
+                  </div>
+                  <p className="quote-text">
+                   My father needed another unit of blood today (due to complications, he still is in need for blood products) and the blood bank at Apollo refused to give the needed platelets due to in ability to replace the units he used, which currently stands at 54 units. I have been ablento find help to replace 7 units and they need atleast 50% of units given to be replaced. Any help will be greatly appreciated. You have already helped earlier, and I am grateful for that.
+                  </p>
+                  <div className="reviewer">
+                    <div className="reviewer-avatar"></div>
+                    <p className="reviewer-name">Anonymus</p>
+                  </div>
+                </div>
+                <div className="card testimonial-card" key={item}>
+                  <div className="rating">
+                    <i className="fas fa-star"></i>
+                    <i className="fas fa-star"></i>
+                    <i className="fas fa-star"></i>
+                    <i className="fas fa-star"></i>
+                    <i className="fas fa-star"></i>
+                  </div>
+                  <p className="quote-text">
+                    You have arranged us blood and helped us a lot, Alhamdhulillah!, we include you in our prayer you include us as well
+                  </p>
+                  <div className="reviewer">
+                    <div className="reviewer-avatar"></div>
+                    <p className="reviewer-name">Abdullah</p>
+                  </div>
+                </div>
+            <div className="card testimonial-card" key={item}>
                   <div className="rating">
                     <i className="fas fa-star"></i>
                     <i className="fas fa-star"></i>
@@ -270,7 +334,7 @@ const Home = () => {
                     <p className="reviewer-name">Chris Johan</p>
                   </div>
                 </div>
-              ))}
+             
             </div>
 
             <div className="story-share-card">
@@ -319,16 +383,16 @@ const Home = () => {
               <h4>About</h4>
               <ul>
                 <li>
-                  <a href="#">About Us</a>
+                  <a href="#about">About Us</a>
                 </li>
                 <li>
-                  <a href="#">Careers</a>
+                  <a href="https://forms.gle/4B65aywSgsrLx6MW9">Careers</a>
                 </li>
                 <li>
                   <a href="#">Contact Us</a>
                 </li>
                 <li>
-                  <a href="#">Our Team</a>
+                  <a href="#members">Our Team</a>
                 </li>
               </ul>
             </div>
@@ -337,16 +401,16 @@ const Home = () => {
               <h4>Services</h4>
               <ul>
                 <li>
-                  <a href="#">Donor Registration</a>
+                  <a href="/donate">Donor Registration</a>
                 </li>
                 <li>
-                  <a href="#">Need Blood</a>
+                  <a href="/donate">Need Blood</a>
                 </li>
                 <li>
                   <a href="#">Blood Drives</a>
                 </li>
                 <li>
-                  <a href="#">Testimonials</a>
+                  <a href="#testimonial">Testimonials</a>
                 </li>
               </ul>
             </div>
@@ -355,10 +419,10 @@ const Home = () => {
               <h4>Legal</h4>
               <ul>
                 <li>
-                  <a href="#">Privacy Policy</a>
+                  <a href="https://cbd-backend.onrender.com/uploads/terms.pdf">Privacy Policy</a>
                 </li>
                 <li>
-                  <a href="#">Terms of Service</a>
+                  <a href="https://cbd-backend.onrender.com/uploads/terms.pdf">Terms of Service</a>
                 </li>
                 <li>
                   <a href="#">Licenses</a>
