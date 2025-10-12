@@ -14,7 +14,9 @@ const Checkbox = ({ label, id, name, checked, onChange, required, ...props }) =>
         {...props}
       />
       <label htmlFor={id} className="ml-2 text-gray-700 text-sm cursor-pointer">
-        {label}
+        <a href='./assests/terms.pdf'>
+          {label}
+        </a>
       </label>
     </div>
   );
