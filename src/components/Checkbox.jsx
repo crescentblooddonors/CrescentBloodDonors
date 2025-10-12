@@ -14,7 +14,7 @@ const Checkbox = ({ label, id, name, checked, onChange, required, ...props }) =>
         {...props}
       />
       <label htmlFor={id} className="ml-2 text-gray-700 text-sm cursor-pointer">
-        <a href='./assests/terms.pdf'>
+        <a href='https://cbd-backend.onrender.com/uploads/admin-1759988783235.jpg' target='blank'>
           {label}
         </a>
       </label>
