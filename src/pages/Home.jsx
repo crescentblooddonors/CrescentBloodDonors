@@ -173,7 +173,7 @@ const Home = () => {
               </div>
               <div className="image-block">
                 <img
-                  src="/assets/blood-donation.png"
+                  src="/assets/cbd-about-us.JPG"
                   alt="Hands holding a red heart near blood donation equipment"
                 />
               </div>
@@ -425,10 +425,10 @@ const Home = () => {
                   <a href="https://cbd-backend.onrender.com/uploads/terms.pdf">Terms of Service</a>
                 </li>
                 <li>
-                  <a href="#">Licenses</a>
+                  <a href="https://www.instagram.com/crescentblooddonors/?hl=en">Instagram</a>
                 </li>
                 <li>
-                  <a href="#">Security</a>
+                  <a href="http://facebook.com/crescentblooddonor/">Facebook</a>
                 </li>
               </ul>
             </div>
