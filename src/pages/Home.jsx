@@ -251,7 +251,7 @@ const Home = () => {
             </p>
 
             <div className="testimonials-grid">
-              <div className="card testimonial-card" key={item}>
+              <div className="card testimonial-card" >
                   <div className="rating">
                     <i className="fas fa-star"></i>
                     <i className="fas fa-star"></i>
@@ -268,7 +268,7 @@ const Home = () => {
                   </div>
                 </div>
 
-                <div className="card testimonial-card" key={item}>
+                <div className="card testimonial-card" >
                   <div className="rating">
                     <i className="fas fa-star"></i>
                     <i className="fas fa-star"></i>
@@ -284,7 +284,7 @@ const Home = () => {
                     <p className="reviewer-name">Prema V</p>
                   </div>
                 </div>
-                <div className="card testimonial-card" key={item}>
+                <div className="card testimonial-card" >
                   <div className="rating">
                     <i className="fas fa-star"></i>
                     <i className="fas fa-star"></i>
@@ -300,7 +300,7 @@ const Home = () => {
                     <p className="reviewer-name">Anonymus</p>
                   </div>
                 </div>
-                <div className="card testimonial-card" key={item}>
+                <div className="card testimonial-card">
                   <div className="rating">
                     <i className="fas fa-star"></i>
                     <i className="fas fa-star"></i>
@@ -316,7 +316,7 @@ const Home = () => {
                     <p className="reviewer-name">Abdullah</p>
                   </div>
                 </div>
-            <div className="card testimonial-card" key={item}>
+            <div className="card testimonial-card">
                   <div className="rating">
                     <i className="fas fa-star"></i>
                     <i className="fas fa-star"></i>
@@ -331,7 +331,7 @@ const Home = () => {
                   </p>
                   <div className="reviewer">
                     <div className="reviewer-avatar"></div>
-                    <p className="reviewer-name">Chris Johan</p>
+                    <p className="reviewer-name">Anonymus</p>
                   </div>
                 </div>
              
