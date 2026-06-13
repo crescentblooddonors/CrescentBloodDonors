@@ -1,7 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "../styles/Home.css";
-import OurServices from "../components/Acheivements";
+import Achievements from "../components/Acheivements";
+import WhatWeDo from "../components/WhatWeDo";
 import { useNavigate } from "react-router-dom";
+import { api } from "../config/Url";
 import Kaasim from '../assets/kaasim.jpg'
 import Irfaan from '../assets/irfaan.jpg'
 import Asmila from '../assets/asmila.jpg'
@@ -10,8 +12,10 @@ const Home = () => {
   const [isNavOpen, setIsNavOpen] = useState(false);
   let navigate = useNavigate()
 
-  // Team member data
-  const teamMembers = [
+  const [teamMembers, setTeamMembers] = useState([]);
+
+  // Team member data fallback
+  const staticTeamMembers = [
     {
       id: 2,
       name: "Asmila",
@@ -53,6 +57,84 @@ const Home = () => {
     },
   ];
 
+  const [testimonials, setTestimonials] = useState([]);
+
+  // Testimonial data fallback
+  const staticTestimonials = [
+    {
+      _id: "static-1",
+      rating: 5,
+      quoteText: "Thank you so much it was a great favour for me, Today it's quite stable",
+      reviewerName: "Rabika"
+    },
+    {
+      _id: "static-2",
+      rating: 5,
+      quoteText: "Blood Received Sir..Thank you so much sir",
+      reviewerName: "Prema V"
+    },
+    {
+      _id: "static-3",
+      rating: 5,
+      quoteText: "My father needed another unit of blood today (due to complications, he still is in need for blood products) and the blood bank at Apollo refused to give the needed platelets due to in ability to replace the units he used, which currently stands at 54 units. I have been ablento find help to replace 7 units and they need atleast 50% of units given to be replaced. Any help will be greatly appreciated. You have already helped earlier, and I am grateful for that.",
+      reviewerName: "Anonymus"
+    },
+    {
+      _id: "static-4",
+      rating: 5,
+      quoteText: "You have arranged us blood and helped us a lot, Alhamdhulillah!, we include you in our prayer you include us as well",
+      reviewerName: "Abdullah"
+    },
+    {
+      _id: "static-5",
+      rating: 5,
+      quoteText: "Thanks to Crescent Blood Donors, I received the blood transfusion I needed during my surgery. Their quick response saved my life. I'm forever grateful!",
+      reviewerName: "Anonymus"
+    }
+  ];
+
+  useEffect(() => {
+    const fetchTeam = async () => {
+      try {
+        const response = await api.get("/team-members");
+        if (response.data && response.data.success && response.data.data.length > 0) {
+          setTeamMembers(response.data.data);
+        } else {
+          setTeamMembers(staticTeamMembers);
+        }
+      } catch (error) {
+        console.error("Failed to fetch team members:", error);
+        setTeamMembers(staticTeamMembers);
+      }
+    };
+    fetchTeam();
+  }, []);
+
+  useEffect(() => {
+    const fetchTestimonials = async () => {
+      try {
+        const response = await api.get("/testimonials");
+        if (response.data && response.data.success && response.data.data.length > 0) {
+          setTestimonials(response.data.data);
+        } else {
+          setTestimonials(staticTestimonials);
+        }
+      } catch (error) {
+        console.error("Failed to fetch testimonials:", error);
+        setTestimonials(staticTestimonials);
+      }
+    };
+    fetchTestimonials();
+  }, []);
+
+  const getImageUrl = (member) => {
+    if (member.img) return member.img; // Static fallback
+    if (!member.image) return "https://cdn-icons-png.flaticon.com/512/3135/3135715.png";
+    if (member.image.startsWith("http")) return member.image;
+    const serverUrl = api.defaults.baseURL.replace('/api', '');
+    return `${serverUrl}${member.image}`;
+  };
+
   return (
     <div className="overflow-x-hidden">
       <div className="decoration top-right-blob">
@@ -79,6 +161,9 @@ const Home = () => {
         <nav className={`nav-links ${isNavOpen ? "nav-open" : ""}`}>
           <a href="#about" onClick={() => setIsNavOpen(false)}>
             ABOUT US
+          </a>
+          <a href="#what-we-do" onClick={() => setIsNavOpen(false)}>
+            WHAT WE DO
           </a>
           <a href="#members" onClick={() => setIsNavOpen(false)}>
             MEMBERS
@@ -199,23 +284,30 @@ const Home = () => {
             </div>
           </section>
 
+          {/* What We Do Section */}
+          <section
+            id="what-we-do"
+            className="section what-we-do-section relative"
+          >
+            <WhatWeDo />
+          </section>
+
           {/* Achievements Section */}
           <section
             id="achivement"
             className="section achievements-section relative"
           >
-            <h3 className="impact-title">Achievements</h3>
-            <OurServices />
+            <Achievements />
           </section>
 
           {/* Meet Our Team Section */}
           <section id="members" className="section team-section">
-            <h2 className="section-title meet-title">Meet Our Team</h2>
+            <h2 className="text-center font-bold text-[#164476] text-4xl mt-10 mb-10 pb-14">MEET OUR TEAM</h2>
             <div className="team-grid">
               {teamMembers.map((member) => (
-                <div className="card team-card" key={member.id}>
+                <div className="card team-card" key={member._id || member.id}>
                   <div className="profile-pic">
-                    <img src={member.img} alt={`Team Member ${member.name}`} />
+                    <img src={getImageUrl(member)} alt={`Team Member ${member.name}`} />
                   </div>
                   <div className="team-details">
                     <p className="member-role">{member.role}</p>
@@ -223,16 +315,16 @@ const Home = () => {
                     <p className="member-bio">{member.bio}</p>
                   </div>
                   <div className="social-links">
-                    <a href={member.social.facebook}>
+                    <a href={member.social?.facebook || "#"}>
                       <i className="fab fa-facebook-f"></i>
                     </a>
-                    <a href={member.social.twitter}>
+                    <a href={member.social?.twitter || "#"}>
                       <i className="fab fa-twitter"></i>
                     </a>
-                    <a href={member.social.linkedin}>
+                    <a href={member.social?.linkedin || "#"}>
                       <i className="fab fa-linkedin-in"></i>
                     </a>
-                    <a href={member.social.instagram}>
+                    <a href={member.social?.instagram || "#"}>
                       <i className="fab fa-instagram"></i>
                     </a>
                   </div>
@@ -244,97 +336,29 @@ const Home = () => {
           {/* Testimonials Section */}
           <section id="testimonial" className="section testimonials-section">
             <i className="fas fa-quote-left quote-icon"></i>
-            <h2 className="story-title">Stories of Hope</h2>
+            <h2 className="text-center font-bold text-[#164476] text-4xl mb-10">STORIES OF HOPES</h2>
             <p className="tagline">
               Read stories from donors and recipients who have experienced the
               life-changing impact of blood donation through our community.
             </p>
 
             <div className="testimonials-grid">
-              <div className="card testimonial-card" >
+              {testimonials.map((item) => (
+                <div className="card testimonial-card" key={item._id}>
                   <div className="rating">
-                    <i className="fas fa-star"></i>
-                    <i className="fas fa-star"></i>
-                    <i className="fas fa-star"></i>
-                    <i className="fas fa-star"></i>
-                    <i className="fas fa-star"></i>
+                    {Array.from({ length: item.rating || 5 }).map((_, i) => (
+                      <i key={i} className="fas fa-star"></i>
+                    ))}
                   </div>
                   <p className="quote-text">
-                    "Thank you so much it was a great favour for me, Today it's quite stable"
+                    "{item.quoteText}"
                   </p>
                   <div className="reviewer">
                     <div className="reviewer-avatar"></div>
-                    <p className="reviewer-name">Rabika</p>
+                    <p className="reviewer-name">{item.reviewerName}</p>
                   </div>
                 </div>
-
-                <div className="card testimonial-card" >
-                  <div className="rating">
-                    <i className="fas fa-star"></i>
-                    <i className="fas fa-star"></i>
-                    <i className="fas fa-star"></i>
-                    <i className="fas fa-star"></i>
-                    <i className="fas fa-star"></i>
-                  </div>
-                  <p className="quote-text">
-                    "Blood Received Sir..Thank you so much sir"
-                  </p>
-                  <div className="reviewer">
-                    <div className="reviewer-avatar"></div>
-                    <p className="reviewer-name">Prema V</p>
-                  </div>
-                </div>
-                <div className="card testimonial-card" >
-                  <div className="rating">
-                    <i className="fas fa-star"></i>
-                    <i className="fas fa-star"></i>
-                    <i className="fas fa-star"></i>
-                    <i className="fas fa-star"></i>
-                    <i className="fas fa-star"></i>
-                  </div>
-                  <p className="quote-text">
-                   My father needed another unit of blood today (due to complications, he still is in need for blood products) and the blood bank at Apollo refused to give the needed platelets due to in ability to replace the units he used, which currently stands at 54 units. I have been ablento find help to replace 7 units and they need atleast 50% of units given to be replaced. Any help will be greatly appreciated. You have already helped earlier, and I am grateful for that.
-                  </p>
-                  <div className="reviewer">
-                    <div className="reviewer-avatar"></div>
-                    <p className="reviewer-name">Anonymus</p>
-                  </div>
-                </div>
-                <div className="card testimonial-card">
-                  <div className="rating">
-                    <i className="fas fa-star"></i>
-                    <i className="fas fa-star"></i>
-                    <i className="fas fa-star"></i>
-                    <i className="fas fa-star"></i>
-                    <i className="fas fa-star"></i>
-                  </div>
-                  <p className="quote-text">
-                    You have arranged us blood and helped us a lot, Alhamdhulillah!, we include you in our prayer you include us as well
-                  </p>
-                  <div className="reviewer">
-                    <div className="reviewer-avatar"></div>
-                    <p className="reviewer-name">Abdullah</p>
-                  </div>
-                </div>
-            <div className="card testimonial-card">
-                  <div className="rating">
-                    <i className="fas fa-star"></i>
-                    <i className="fas fa-star"></i>
-                    <i className="fas fa-star"></i>
-                    <i className="fas fa-star"></i>
-                    <i className="fas fa-star"></i>
-                  </div>
-                  <p className="quote-text">
-                    "Thanks to Crescent Blood Donors, I received the blood
-                    transfusion I needed during my surgery. Their quick response
-                    saved my life. I'm forever grateful!"
-                  </p>
-                  <div className="reviewer">
-                    <div className="reviewer-avatar"></div>
-                    <p className="reviewer-name">Anonymus</p>
-                  </div>
-                </div>
-             
+              ))}
             </div>
 
             <div className="story-share-card">

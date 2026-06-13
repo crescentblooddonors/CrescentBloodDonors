@@ -6,12 +6,12 @@ import BloodNeedDetails from '../components/BloodDetails';
 
 const SortIcon = ({ direction }) => {
     if (!direction) {
-        return <svg className="w-4 h-4 inline-block text-gray-400 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 9l4-4 4 4m0 6l-4 4-4-4"></path></svg>;
+        return <svg className="w-3.5 h-3.5 inline-block text-slate-300 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 9l4-4 4 4m0 6l-4 4-4-4"></path></svg>;
     }
     return direction === 'ascending' ? (
-        <svg className="w-4 h-4 inline-block text-blue-600 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 15l7-7 7 7"></path></svg>
+        <svg className="w-3.5 h-3.5 inline-block text-red-500 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 15l7-7 7 7"></path></svg>
     ) : (
-        <svg className="w-4 h-4 inline-block text-blue-600 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path></svg>
+        <svg className="w-3.5 h-3.5 inline-block text-red-500 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path></svg>
     );
 };
 
@@ -97,13 +97,13 @@ const VerifyButton = ({ item }) => {
           }
         // Handle donor verification similarly
     };
-     return <button
+      return <button
         onClick={() => handleVerify(item._id)} // Using _id assuming MongoDB
         disabled={isVerified}
-        className={`w-full md:w-auto px-4 py-2 text-sm font-medium rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 transition-colors duration-200 ${
+        className={`w-full md:w-auto px-4 py-1.5 text-xs font-semibold rounded-lg transition-all duration-200 ${
             isVerified
-                    ? 'bg-gray-200 text-gray-500 cursor-not-allowed'
-                    : 'bg-[#153F76] text-white hover:bg-red-700 focus:ring-[#153F76]'
+                    ? 'bg-slate-50 text-slate-400 border border-slate-100 cursor-not-allowed'
+                    : 'bg-slate-800 text-white hover:bg-slate-900 shadow-sm cursor-pointer'
         }`}
     >
         {isVerified ? 'Verified' : 'Verify'}
@@ -114,22 +114,22 @@ const VerifyButton = ({ item }) => {
 const RecipientsView = ({ data, onVerify }) => {
     const { sortedAndFilteredData, requestSort, handleFilterChange, sortConfig } = useTableManager(data);
 
-    const commonSelectClasses = "w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-[#153F76] focus:border-[#153F76]";
+    const commonSelectClasses = "w-full px-3 py-2 text-xs bg-slate-50/50 hover:bg-white border border-slate-100 hover:border-slate-200 focus:border-red-200 focus:bg-white focus:outline-none rounded-lg transition-all duration-150";
     const [showDetail,setShowDetail] = useState(false)
     const [selectedNeed,setSelectedNeed] = useState(null)
 
 
     const StatusBadge = ({ verified, children }) => (
-        <span className={`px-2.5 py-0.5 inline-flex text-xs leading-5 font-semibold rounded-full ${
-            verified ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'
+        <span className={`px-2.5 py-0.5 inline-flex text-[10px] leading-5 font-semibold rounded-md ${
+            verified ? 'bg-emerald-50 text-emerald-700 border border-emerald-100/30' : 'bg-amber-50 text-amber-700 border border-amber-100/30'
         }`}>
             {children}
         </span>
     );
     
     const sortableHeader = (label, key) => (
-        <th className="p-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-            <button onClick={() => requestSort(key)} className="flex items-center space-x-1 hover:text-gray-900">
+        <th className="p-4 text-left text-xs font-semibold text-slate-400 uppercase tracking-wider">
+            <button onClick={() => requestSort(key)} className="flex items-center space-x-1 hover:text-slate-800 transition-colors">
                 <span>{label}</span>
                 <SortIcon direction={sortConfig.key === key ? sortConfig.direction : null} />
             </button>
@@ -138,110 +138,136 @@ const RecipientsView = ({ data, onVerify }) => {
 
     return (
         <>
-        {showDetail?<BloodNeedDetails needData={selectedNeed} handleBack={()=>{
-            setSelectedNeed(null)
-            setShowDetail(false)
-        }}/>:<div className="bg-white p-4 sm:p-6 rounded-xl shadow-lg">
-            <h2 className="text-2xl font-bold text-slate-800 mb-6">Recipient Requests</h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-                <input type="text" placeholder="Filter by City/State..." onChange={e => handleFilterChange('location', e.target.value)} className={commonSelectClasses} />
-                <select onChange={e => handleFilterChange('urgency', e.target.value)} className={commonSelectClasses}>
-                    <option value="">All Urgencies</option>
-                    <option value="Immediate">Immediate</option>
-                    <option value="Urgent">Urgent</option>
-                    <option value="Routine">Routine</option>
-                </select>
-                <select onChange={e => handleFilterChange('bloodGroup', e.target.value)} className={commonSelectClasses}>
-                    <option value="">All Blood Groups</option>
-                    <option value="A+">A+</option>
-                    <option value="A-">A-</option>
-                    <option value="A1+">A1+</option>
-                    <option value="A1-">A1-</option>
-                    <option value="A2+">A2+</option>
-                    <option value="A2-">A2-</option>
-                    <option value="B+">B+</option>
-                    <option value="B-">B-</option>
-                    <option value="AB+">AB+</option>
-                    <option value="AB-">AB-</option>
-                    <option value="AB+">A1B+</option>
-                    <option value="AB-">A1B-</option>
-                    <option value="AB+">A2B+</option>
-                    <option value="AB-">A2B-</option>
-                    <option value="O+">O+</option>
-                    <option value="O-">O-</option>
-                    <option value="INRA">INRA</option>
-                    <option value="Bombay Blood Group">Bombay Blood</option>
-                </select>
-                <select onChange={e => handleFilterChange('verification', e.target.value)} className={commonSelectClasses}>
-                    <option value="">All Statuses</option>
-                    <option value="true">Verified</option>
-                    <option value="false">Not Verified</option>
-                </select>
-            </div>
-            
-            {/* Table for Medium and larger screens */}
-            <div className="overflow-x-auto hidden md:block">
-                <table className="min-w-full bg-white">
-                    <thead className="bg-slate-50">
-                        <tr>
-                            {sortableHeader('Name', 'name')}
-                            {sortableHeader('Blood Group', 'bloodGroup')}
-                            {sortableHeader('Location', 'city')}
-                            {sortableHeader('Urgency', 'urgency')}
-                            {sortableHeader('Severity', 'severity')}
-                            {sortableHeader('Status', 'verified')}
-                            <th className="p-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody className="divide-y divide-gray-200">
-                        {sortedAndFilteredData.length > 0 ? sortedAndFilteredData.map((item) => (
-                            <tr key={item._id} className="hover:bg-slate-50">
-                                <td className="p-4 whitespace-nowrap text-sm text-gray-800 font-medium" >
-                                    <p onClick={()=>{
-                                setSelectedNeed(item);
-                                setShowDetail(true)
-                            }}>{item.name}</p>
-                                </td>
-                                <td className="p-4 whitespace-nowrap text-sm text-gray-700"><span className="font-mono text-[#153F76] font-bold">{item.bloodGroup}</span></td>
-                                <td className="p-4 whitespace-nowrap text-sm text-gray-700">{`${item.city}, ${item.state}`}</td>
-                                <td className="p-4 whitespace-nowrap text-sm text-gray-700">{item.urgency}</td>
-                                <td className="p-4 whitespace-nowrap text-sm text-gray-700">{`${item.severity}%`}</td>
-                                <td className="p-4 whitespace-nowrap text-sm text-gray-700"><StatusBadge verified={item.verification}>{item.status}</StatusBadge></td>
-                                <td className="p-4 whitespace-nowrap text-sm text-gray-700"><VerifyButton item={item} /></td>
-                            </tr>
-                        )) : (
-                            <tr><td colSpan="7" className="text-center p-6 text-gray-500">No records found.</td></tr>
-                        )}
-                    </tbody>
-                </table>
-            </div>
-
-             {/* Cards for small screens */}
-            <div className="grid grid-cols-1 gap-4 md:hidden">
-                {sortedAndFilteredData.length > 0 ? sortedAndFilteredData.map(item => (
-                    <div key={item._id} className="bg-slate-50 p-4 rounded-lg shadow-md border border-gray-200 space-y-3">
-                        <div className="flex justify-between items-start">
-                            <h3 className="font-bold text-lg text-slate-800" onClick={()=>{
-                                setSelectedNeed(item);
-                                setShowDetail(true)
-                            }}>{item.name}</h3>
-                            <span className="font-mono text-xl text-[#153F76] font-bold">{item.bloodGroup}</span>
-                        </div>
-                        <div className="text-sm text-slate-600">
-                            <p><span className="font-semibold">Location:</span> {`${item.city}, ${item.state}`}</p>
-                            <p><span className="font-semibold">Urgency:</span> {item.urgency}</p>
-                            <p><span className="font-semibold">Severity:</span> {item.severity}%</p>
-                        </div>
-                        <div className="flex justify-between items-center pt-2">
-                           <StatusBadge verified={item.verification} />
-                           <VerifyButton item={item} />
-                        </div>
+        {showDetail ? (
+            <BloodNeedDetails needData={selectedNeed} handleBack={()=>{
+                setSelectedNeed(null)
+                setShowDetail(false)
+            }}/>
+        ) : (
+            <div className="bg-white border border-slate-100 rounded-2xl p-6 shadow-sm">
+                <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
+                    <div>
+                        <h2 className="text-lg font-bold text-slate-800">Recipient Requests</h2>
+                        <p className="text-xs text-slate-400">Filter and verify critical requests from recipients.</p>
                     </div>
-                )) : (
-                    <div className="text-center p-6 text-gray-500">No records found.</div>
-                )}
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 mb-6">
+                    <input type="text" placeholder="Filter by City/State..." onChange={e => handleFilterChange('location', e.target.value)} className={commonSelectClasses} />
+                    <select onChange={e => handleFilterChange('urgency', e.target.value)} className={commonSelectClasses}>
+                        <option value="">All Urgencies</option>
+                        <option value="Immediate">Immediate</option>
+                        <option value="Urgent">Urgent</option>
+                        <option value="Routine">Routine</option>
+                    </select>
+                    <select onChange={e => handleFilterChange('bloodGroup', e.target.value)} className={commonSelectClasses}>
+                        <option value="">All Blood Groups</option>
+                        <option value="A+">A+</option>
+                        <option value="A-">A-</option>
+                        <option value="A1+">A1+</option>
+                        <option value="A1-">A1-</option>
+                        <option value="A2+">A2+</option>
+                        <option value="A2-">A2-</option>
+                        <option value="B+">B+</option>
+                        <option value="B-">B-</option>
+                        <option value="AB+">AB+</option>
+                        <option value="AB-">AB-</option>
+                        <option value="AB+">A1B+</option>
+                        <option value="AB-">A1B-</option>
+                        <option value="AB+">A2B+</option>
+                        <option value="AB-">A2B-</option>
+                        <option value="O+">O+</option>
+                        <option value="O-">O-</option>
+                        <option value="INRA">INRA</option>
+                        <option value="Bombay Blood Group">Bombay Blood</option>
+                    </select>
+                    <select onChange={e => handleFilterChange('verification', e.target.value)} className={commonSelectClasses}>
+                        <option value="">All Statuses</option>
+                        <option value="true">Verified</option>
+                        <option value="false">Not Verified</option>
+                    </select>
+                </div>
+                
+                {/* Table for Medium and larger screens */}
+                <div className="overflow-x-auto hidden md:block">
+                    <table className="min-w-full">
+                        <thead>
+                            <tr className="border-b border-slate-100 text-left">
+                                {sortableHeader('Name', 'name')}
+                                {sortableHeader('Blood Group', 'bloodGroup')}
+                                {sortableHeader('Location', 'city')}
+                                {sortableHeader('Urgency', 'urgency')}
+                                {sortableHeader('Severity', 'severity')}
+                                {sortableHeader('Status', 'verified')}
+                                <th className="p-4 text-left text-xs font-semibold text-slate-400 uppercase tracking-wider">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody className="divide-y divide-slate-50 text-xs text-slate-600">
+                            {sortedAndFilteredData.length > 0 ? sortedAndFilteredData.map((item) => (
+                                <tr key={item._id} className="hover:bg-slate-50/50 transition-colors">
+                                    <td className="p-4 whitespace-nowrap font-medium text-slate-800">
+                                        <button 
+                                            onClick={() => {
+                                                setSelectedNeed(item);
+                                                setShowDetail(true);
+                                            }}
+                                            className="hover:text-red-500 font-bold transition-colors text-left"
+                                        >
+                                            {item.name}
+                                        </button>
+                                    </td>
+                                    <td className="p-4 whitespace-nowrap"><span className="font-mono text-red-500 font-bold text-sm">{item.bloodGroup}</span></td>
+                                    <td className="p-4 whitespace-nowrap text-slate-500">{`${item.city}, ${item.state}`}</td>
+                                    <td className="p-4 whitespace-nowrap">
+                                        <span className={`px-2 py-0.5 rounded font-semibold text-[10px] ${
+                                            item.urgency === 'Immediate' || item.urgency === 'Urgent' ? 'bg-red-50 text-red-600' : 'bg-slate-100 text-slate-600'
+                                        }`}>
+                                            {item.urgency}
+                                        </span>
+                                    </td>
+                                    <td className="p-4 whitespace-nowrap font-medium">{`${item.severity}%`}</td>
+                                    <td className="p-4 whitespace-nowrap"><StatusBadge verified={item.verification}>{item.status}</StatusBadge></td>
+                                    <td className="p-4 whitespace-nowrap"><VerifyButton item={item} /></td>
+                                </tr>
+                            )) : (
+                                <tr><td colSpan="7" className="text-center p-8 text-slate-400 font-medium">No records found.</td></tr>
+                            )}
+                        </tbody>
+                    </table>
+                </div>
+
+                 {/* Cards for small screens */}
+                <div className="grid grid-cols-1 gap-4 md:hidden">
+                    {sortedAndFilteredData.length > 0 ? sortedAndFilteredData.map(item => (
+                        <div key={item._id} className="bg-white p-4 rounded-xl border border-slate-100 shadow-sm space-y-3">
+                            <div className="flex justify-between items-start">
+                                <button 
+                                    onClick={() => {
+                                        setSelectedNeed(item);
+                                        setShowDetail(true);
+                                    }}
+                                    className="font-bold text-slate-800 text-left hover:text-red-500"
+                                >
+                                    {item.name}
+                                </button>
+                                <span className="font-mono text-red-500 font-bold text-base">{item.bloodGroup}</span>
+                            </div>
+                            <div className="text-xs text-slate-500 space-y-1">
+                                <p><span className="font-semibold text-slate-700">Location:</span> {`${item.city}, ${item.state}`}</p>
+                                <p><span className="font-semibold text-slate-700">Urgency:</span> {item.urgency}</p>
+                                <p><span className="font-semibold text-slate-700">Severity:</span> {item.severity}%</p>
+                            </div>
+                            <div className="flex justify-between items-center pt-2 border-t border-slate-50">
+                               <StatusBadge verified={item.verification}>{item.status}</StatusBadge>
+                               <VerifyButton item={item} />
+                            </div>
+                        </div>
+                    )) : (
+                        <div className="text-center p-8 text-slate-400 font-medium">No records found.</div>
+                    )}
+                </div>
             </div>
-        </div>}
+        )}
         </>
     );
 };
@@ -249,33 +275,11 @@ const RecipientsView = ({ data, onVerify }) => {
 // --- Donors View Component ---
 const DonorsView = ({ data, onVerify }) => {
     const { sortedAndFilteredData, requestSort, handleFilterChange, sortConfig } = useTableManager(data);
-    const commonSelectClasses = "w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-[#153F76] focus:border-[#153F76]";
-
-    const VerifyButton = ({ item }) => (
-         <button
-            onClick={() => onVerify(item._id)} // Using _id assuming MongoDB
-            disabled={item.verified}
-            className={`w-full md:w-auto px-4 py-2 text-sm font-medium rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 transition-colors duration-200 ${
-                item.verification
-                    ? 'bg-gray-200 text-gray-500 cursor-not-allowed'
-                    : 'bg-[#153F76] text-white hover:bg-red-700 focus:ring-[#153F76]'
-            }`}
-        >
-            {item.verification ? 'Verified' : 'Verify'}
-        </button>
-    );
-
-    const StatusBadge = ({ verified }) => (
-        <span className={`px-2.5 py-0.5 inline-flex text-xs leading-5 font-semibold rounded-full ${
-            verified ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'
-        }`}>
-            {verified ? 'Verified' : 'Not Verified'}
-        </span>
-    );
+    const commonSelectClasses = "w-full px-3 py-2 text-xs bg-slate-50/50 hover:bg-white border border-slate-100 hover:border-slate-200 focus:border-red-200 focus:bg-white focus:outline-none rounded-lg transition-all duration-150";
 
     const sortableHeader = (label, key) => (
-        <th className="p-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-            <button onClick={() => requestSort(key)} className="flex items-center space-x-1 hover:text-gray-900">
+        <th className="p-4 text-left text-xs font-semibold text-slate-400 uppercase tracking-wider">
+            <button onClick={() => requestSort(key)} className="flex items-center space-x-1 hover:text-slate-800 transition-colors">
                 <span>{label}</span>
                 <SortIcon direction={sortConfig.key === key ? sortConfig.direction : null} />
             </button>
@@ -283,9 +287,13 @@ const DonorsView = ({ data, onVerify }) => {
     );
 
     return (
-        <div className="bg-white p-4 sm:p-6 rounded-xl shadow-lg">
-            <h2 className="text-2xl font-bold text-slate-800 mb-6">Available Donors</h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
+        <div className="bg-white border border-slate-100 rounded-2xl p-6 shadow-sm">
+            <div className="mb-6">
+                <h2 className="text-lg font-bold text-slate-800">Available Donors</h2>
+                <p className="text-xs text-slate-400">View and manage registered donor records.</p>
+            </div>
+            
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 mb-6">
                 <input type="text" placeholder="Filter by City/State..." onChange={e => handleFilterChange('location', e.target.value)} className={commonSelectClasses} />
                 <select onChange={e => handleFilterChange('bloodGroup', e.target.value)} className={commonSelectClasses}>
                     <option value="">All Blood Groups</option>
@@ -312,30 +320,29 @@ const DonorsView = ({ data, onVerify }) => {
 
             {/* Table for Medium and larger screens */}
             <div className="overflow-x-auto hidden md:block">
-                <table className="min-w-full bg-white">
-                    <thead className="bg-slate-50">
-                        <tr>
+                <table className="min-w-full">
+                    <thead>
+                        <tr className="border-b border-slate-100 text-left">
                             {sortableHeader('Name', 'name')}
                             {sortableHeader('Blood Group', 'bloodGroup')}
                             {sortableHeader('Location', 'city')}
                             {sortableHeader('Last Donated', 'lastDonated')}
-                            <th className="p-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Gender</th>
-                            <th className="p-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Mobile</th>
-
+                            <th className="p-4 text-left text-xs font-semibold text-slate-400 uppercase tracking-wider">Gender</th>
+                            <th className="p-4 text-left text-xs font-semibold text-slate-400 uppercase tracking-wider">Mobile</th>
                         </tr>
                     </thead>
-                    <tbody className="divide-y divide-gray-200">
+                    <tbody className="divide-y divide-slate-50 text-xs text-slate-600">
                          {sortedAndFilteredData.length > 0 ? sortedAndFilteredData.map(item => (
-                            <tr key={item._id} className="hover:bg-slate-50">
-                                <td className="p-4 whitespace-nowrap text-sm text-gray-800 font-medium">{item.name}</td>
-                                <td className="p-4 whitespace-nowrap text-sm text-gray-700"><span className="font-mono text-[#153F76] font-bold">{item.bloodGroup}</span></td>
-                                <td className="p-4 whitespace-nowrap text-sm text-gray-700">{`${item.city}, ${item.state}`}</td>
-                                <td className="p-4 whitespace-nowrap text-sm text-gray-700">{new Date(item.lastDonationDate).toLocaleDateString()}</td>
-                                <td className="p-4 whitespace-nowrap text-sm text-gray-700">{item.gender}</td>
-                                <td className="p-4 whitespace-nowrap text-sm text-gray-700">{item.mobileNumber}</td>
+                            <tr key={item._id} className="hover:bg-slate-50/50 transition-colors">
+                                <td className="p-4 whitespace-nowrap font-medium text-slate-800">{item.name}</td>
+                                <td className="p-4 whitespace-nowrap"><span className="font-mono text-red-500 font-bold text-sm">{item.bloodGroup}</span></td>
+                                <td className="p-4 whitespace-nowrap text-slate-500">{`${item.city}, ${item.state}`}</td>
+                                <td className="p-4 whitespace-nowrap text-slate-500">{new Date(item.lastDonationDate).toLocaleDateString()}</td>
+                                <td className="p-4 whitespace-nowrap">{item.gender}</td>
+                                <td className="p-4 whitespace-nowrap font-mono">{item.mobileNumber}</td>
                             </tr>
                         )) : (
-                             <tr><td colSpan="6" className="text-center p-6 text-gray-500">No records found.</td></tr>
+                             <tr><td colSpan="6" className="text-center p-8 text-slate-400 font-medium">No records found.</td></tr>
                         )}
                     </tbody>
                 </table>
@@ -344,22 +351,22 @@ const DonorsView = ({ data, onVerify }) => {
              {/* Cards for small screens */}
             <div className="grid grid-cols-1 gap-4 md:hidden">
                 {sortedAndFilteredData.length > 0 ? sortedAndFilteredData.map(item => (
-                    <div key={item._id} className="bg-slate-50 p-4 rounded-lg shadow-md border border-gray-200 space-y-3">
+                    <div key={item._id} className="bg-white p-4 rounded-xl border border-slate-100 shadow-sm space-y-3">
                         <div className="flex justify-between items-start">
-                            <h3 className="font-bold text-lg text-slate-800">{item.name}</h3>
-                            <span className="font-mono text-xl text-[#153F76] font-bold">{item.bloodGroup}</span>
+                            <h3 className="font-bold text-slate-800 text-sm">{item.name}</h3>
+                            <span className="font-mono text-red-500 font-bold text-sm">{item.bloodGroup}</span>
                         </div>
-                        <div className="text-sm text-slate-600">
-                            <p><span className="font-semibold">Location:</span> {`${item.city}, ${item.state}`}</p>
-                            <p><span className="font-semibold">Last Donated:</span> {new Date(item.lastDonated).toLocaleDateString()}</p>
+                        <div className="text-xs text-slate-500 space-y-1">
+                            <p><span className="font-semibold text-slate-700">Location:</span> {`${item.city}, ${item.state}`}</p>
+                            <p><span className="font-semibold text-slate-700">Last Donated:</span> {new Date(item.lastDonationDate).toLocaleDateString()}</p>
                         </div>
-                        <div className="flex justify-between items-center pt-2">
-                            <td className="p-4 whitespace-nowrap text-sm text-gray-700">Gender:{item.gender}</td>
-                            <td className="p-4 whitespace-nowrap text-sm text-gray-700">Mobile:{item.mobileNumber}</td>
+                        <div className="flex justify-between items-center pt-2 border-t border-slate-50 text-[10px] text-slate-400 font-medium">
+                            <span>Gender: {item.gender}</span>
+                            <span>Mobile: {item.mobileNumber}</span>
                         </div>
                     </div>
                 )) : (
-                     <div className="text-center p-6 text-gray-500">No records found.</div>
+                     <div className="text-center p-8 text-slate-400 font-medium">No records found.</div>
                 )}
             </div>
         </div>
@@ -376,7 +383,6 @@ export default function VerificationTable() {
 
     const [cookies] = useCookies() 
   
-
 
     useEffect(() => {
         const fetchData = async () => {
@@ -425,25 +431,25 @@ export default function VerificationTable() {
     };
 
     return (
-            <div className="max-w-7xl mx-auto">
-                <div className="border-b border-gray-200">
-                    <nav className="-mb-px flex space-x-4 sm:space-x-8 px-2 sm:px-0">
+            <div className="max-w-7xl mx-auto space-y-6">
+                <div className="flex justify-between items-center border-b border-slate-100 pb-2">
+                    <nav className="-mb-px flex space-x-6">
                         <button
                             onClick={() => setActiveTab('recipients')}
-                            className={`py-4 px-1 border-b-4 font-bold text-lg whitespace-nowrap focus:outline-none transition-colors duration-200 ${
+                            className={`pb-4 px-1 border-b-2 font-semibold text-sm whitespace-nowrap focus:outline-none transition-all duration-200 ${
                                 activeTab === 'recipients'
-                                    ? 'border-[#153F76] text-[#153F76]'
-                                    : 'border-transparent text-gray-500 hover:text-[#153F76] hover:border-[#153F76]'
+                                    ? 'border-red-500 text-slate-900 font-bold'
+                                    : 'border-transparent text-slate-400 hover:text-slate-600'
                             }`}
                         >
                             Recipients
                         </button>
                         <button
                             onClick={() => setActiveTab('donors')}
-                            className={`py-4 px-1 border-b-4 font-bold text-lg whitespace-nowrap focus:outline-none transition-colors duration-200 ${
+                            className={`pb-4 px-1 border-b-2 font-semibold text-sm whitespace-nowrap focus:outline-none transition-all duration-200 ${
                                 activeTab === 'donors'
-                                    ? 'border-[#153F76] text-[#153F76]'
-                                    : 'border-transparent text-gray-500 hover:text-[#153F76] hover:border-[#153F76]'
+                                    ? 'border-red-500 text-slate-900 font-bold'
+                                    : 'border-transparent text-slate-400 hover:text-slate-600'
                             }`}
                         >
                             Donors
@@ -451,27 +457,28 @@ export default function VerificationTable() {
                     </nav>
                 </div>
 
-                <main className="mt-6">
+                <main className="mt-4">
                     {loading && (
-                        <div className="text-center p-10">
-                            <div className="w-12 h-12 border-4 border-[#153F76] border-dashed rounded-full animate-spin mx-auto"></div>
-                            <p className="mt-4 text-lg text-slate-600">Loading Data...</p>
+                        <div className="text-center p-12 bg-white border border-slate-100 rounded-2xl shadow-sm">
+                            <div className="w-10 h-10 border-2 border-red-500 border-dashed rounded-full animate-spin mx-auto"></div>
+                            <p className="mt-4 text-xs text-slate-400 font-medium">Fetching verified listings...</p>
                         </div>
                     )}
                     {error && (
-                        <div className="text-center p-10 bg-red-50 border border-red-200 rounded-lg">
-                            <p className="text-lg font-semibold text-red-700">{error}</p>
+                        <div className="text-center p-10 bg-rose-50 border border-rose-100 rounded-xl">
+                            <p className="text-sm font-semibold text-rose-700">{error}</p>
                         </div>
                     )}
                     {!loading && !error && (
-                        <>
+                        <div className="animate-fadeIn">
                             {activeTab === 'recipients' && <RecipientsView data={recipients} onVerify={(id) => handleVerify(id, 'recipient')} />}
                             {activeTab === 'donors' && <DonorsView data={donors} onVerify={(id) => handleVerify(id, 'donor')} />}
-                        </>
+                        </div>
                     )}
                 </main>
             </div>
       
     );
 }
+
 

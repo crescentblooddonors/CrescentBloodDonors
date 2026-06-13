@@ -14,10 +14,10 @@ function App() {
       {/* <ComingSoon /> */}
       {/* <BecomeADonor /> */}
       <Routes>
-        <Route path='/' element={<Home />}/>
-        <Route path='/donate' element={<BecomeADonor />}/>
-        <Route path='/auth' element={<Auth />}/>
-        <Route path='/admin' element={<AdminDashboard />}/>
+        <Route path='/' element={<Home />} />
+        <Route path='/donate' element={<BecomeADonor />} />
+        <Route path='/auth' element={<Auth />} />
+        <Route path='/admin' element={<AdminDashboard />} />
       </Routes>
 
     </>

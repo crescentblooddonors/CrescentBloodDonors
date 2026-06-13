@@ -1,37 +1,28 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import { api } from "../config/Url";
 
-// Data for the services section
-const servicesData = [
+const staticAchievementsData = [
   {
-    icon: "fa-car", // Changed icon to represent traffic/transportation
+    icon: "fa-car",
     title: "Traffic Awareness Camp",
-    color: "text-blue-600", // Used a blue color for traffic theme
+    color: "text-blue-600",
     description: [
       "Launched the new academic year with an impactful Traffic Awareness Camp, led by the boys’ team, to promote road safety and social responsibility.",
       "The campaign reminded commuters that “Every move behind the wheel matters — drive with care, choose responsibility.”",
       "Participants engaged the public through interactive demonstrations, placards, and awareness talks under the guidance of the Traffic Police Department.",
       "The initiative included a bilingual road safety pledge (Tamil & English), emphasizing the importance of helmets, seatbelts, sobriety, and first aid awareness through the Good Samaritan initiative.",
     ],
-    stats: {
-      theme: "Road Safety", // New statistic to highlight the theme
-      collaboration: "Traffic Police",
-    },
   },
   {
-    icon: "fa-child", // Icon representing children/social event
+    icon: "fa-child",
     title: "Children’s Day Out",
-    color: "text-green-500", // Used a green color for a joyful/compassion theme
+    color: "text-green-500",
     description: [
       "A heartfelt celebration of joy, learning, and compassion, reflecting CBD’s belief that kindness goes beyond blood donation.",
       "The event brought together 75 children from three orphanages: Golden Heart Foundation, Nanthavanam Girls Shelter Home, and Rainbow Nest Boys Home.",
       "The outing was successfully managed by 25 volunteers and 15 caretakers.",
       "Activities included exploring the zoo, enjoying games, and sharing meals, all arranged by the CBD team.",
     ],
-    stats: {
-      children: "75",
-      volunteers: "25",
-      locations: "3 Orphanages",
-    },
   },
   {
     icon: "fa-trophy",
@@ -42,75 +33,110 @@ const servicesData = [
       "The event recorded an impressive 450 registrations and 311 successful donations, showcasing the community’s strong spirit of volunteerism.",
       "This milestone reaffirmed the institute’s unwavering commitment to humanitarian service and community welfare.",
     ],
-    stats: {
-      registrations: "450",
-      donations: "311",
-    },
-  },
-  {
-    icon: "fa-utensils",
-    title: "Food Donation Drives",
-    color: "text-orange-500",
-    description: [
-      "Organize food distribution programs to provide meals for underprivileged individuals, especially during festivals and community events.",
-    ],
-  },
-  {
-    icon: "fa-hands-helping",
-    title: "Social Service Activities",
-    color: "text-purple-500",
-    description: [
-      "Host traffic awareness campaigns to promote road safety and responsible behavior.",
-      "Celebrate national and special days with events aimed at social upliftment.",
-    ],
-  },
-  {
-    icon: "fa-users",
-    title: "Community Building",
-    color: "text-teal-500",
-    description: [
-      "Encourage students to take active roles in social initiatives, building a strong network of changemakers.",
-    ],
   },
 ];
 
-const ServiceCard = ({ icon, title, description, color }) => (
-  <div className="bg-white rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300 p-6 flex flex-col">
-    <div className="flex items-center mb-4">
-      <div className={`text-3xl mr-4 ${color}`}>
-        <i className={`fas ${icon}`}></i>
-      </div>
-      <h3 className="text-xl font-bold text-dark-blue">{title}</h3>
-    </div>
-    <ul className="space-y-2 text-gray-600 list-disc list-inside flex-grow">
-      {description.map((point, index) => (
-        <li key={index} className="text-justify">{point}</li>
-      ))}
-    </ul>
-  </div>
-);
+const Achievements = () => {
+  const [achievements, setAchievements] = useState([]);
 
-const OurServices = () => {
+  useEffect(() => {
+    const fetchAchievements = async () => {
+      try {
+        const response = await api.get("/achievements");
+        if (response.data && response.data.success && response.data.data.length > 0) {
+          setAchievements(response.data.data);
+        } else {
+          setAchievements(staticAchievementsData);
+        }
+      } catch (error) {
+        console.error("Failed to fetch achievements:", error);
+        setAchievements(staticAchievementsData);
+      }
+    };
+    fetchAchievements();
+  }, []);
+
   return (
-    <section className="bg-gray-50 py-16 sm:py-20 font-poppins">
-      <div className="mx-auto px-4 sm:px-4 lg:px-3">
-        <div className="text-center mb-12">
-          <h2 className="text-3xl sm:text-4xl font-black text-dark-blue uppercase">
-            What We Do
+    <section className="bg-slate-50/50  font-poppins relative overflow-hidden">
+      {/* Soft blur visual details */}
+      <div className="absolute top-1/3 left-0 w-80 h-80 bg-red-50/20 rounded-full blur-3xl -z-10"></div>
+      <div className="absolute bottom-1/3 right-0 w-80 h-80 bg-blue-50/20 rounded-full blur-3xl -z-10"></div>
+
+      <div className="mx-auto px-6 max-w-5xl">
+        <div className="text-center mb-16">
+          <span className="text-xs font-bold px-3 py-1 rounded-full bg-red-50 text-red-600 border border-red-100 uppercase tracking-wider">Milestones</span>
+          <h2 className="text-3xl sm:text-4xl font-black text-[#153F76] uppercase mt-3">
+            Achievements
           </h2>
-          <p className="mt-4 text-lg text-gray-600 max-w-2xl mx-auto">
-            Our initiatives are focused on creating a positive impact in the
-            community through various service-oriented activities.
+          <p className="mt-4 text-base text-slate-500 max-w-2xl mx-auto">
+            A testament to our hard work, dedication, and the milestones we have reached together.
           </p>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {servicesData.map((service, index) => (
-            <ServiceCard key={index} {...service} />
-          ))}
+
+        {/* Vertical Timeline Track */}
+        <div className="relative">
+          {/* Vertical central divider line (desktop only) */}
+          <div className="absolute left-1/2 -translate-x-1/2 top-4 bottom-4 w-0.5 bg-slate-200 hidden md:block"></div>
+
+          <div className="space-y-12 md:space-y-16">
+            {achievements.map((item, index) => {
+              const isEven = index % 2 === 0;
+              const getIconBg = (colorClass) => {
+                if (colorClass.includes('blue')) return 'bg-blue-50';
+                if (colorClass.includes('green')) return 'bg-green-50';
+                if (colorClass.includes('red')) return 'bg-red-50';
+                return 'bg-slate-50';
+              };
+
+              return (
+                <div
+                  key={item._id || index}
+                  className={`flex flex-col md:flex-row items-center justify-between gap-6 md:gap-0 relative ${isEven ? '' : 'md:flex-row-reverse'
+                    }`}
+                >
+                  {/* Timeline Card */}
+                  <div className="w-full md:w-[45%] group">
+                    <div className="bg-white border border-slate-100 hover:border-slate-200/80 p-6 md:p-8 rounded-2xl shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 relative">
+
+                      {/* Timeline connection pointer */}
+                      <div className={`absolute top-1/2 -translate-y-1/2 w-4 h-4 bg-white border-2 border-slate-200 rounded-full hidden md:block ${isEven ? '-right-[29px]' : '-left-[29px]'
+                        } z-10 group-hover:border-red-500 group-hover:bg-red-500 transition-all duration-200`}></div>
+
+                      <div className="flex items-center gap-4 mb-4">
+                        <div className={`w-12 h-12 rounded-xl flex items-center justify-center text-xl ${getIconBg(item.color || 'text-red-600')} ${item.color || 'text-red-600'} shrink-0`}>
+                          <i className={`fas ${item.icon.startsWith('fa-') ? item.icon : `fa-${item.icon}`}`}></i>
+                        </div>
+                        <h3 className="text-lg font-bold text-slate-800 group-hover:text-[#153F76] transition-colors mb-0">{item.title}</h3>
+                      </div>
+
+                      <ul className="space-y-3 pl-1">
+                        {item.description.map((point, pIdx) => (
+                          <li key={pIdx} className="flex items-start gap-2.5 text-sm text-slate-500 leading-relaxed text-justify">
+                            <span className="w-1.5 h-1.5 rounded-full bg-red-500 mt-2 shrink-0"></span>
+                            <span>{point}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  </div>
+
+                  {/* Centered Node Number Index */}
+                  <div className="absolute left-1/2 -translate-x-1/2 w-8 h-8 rounded-full bg-white border-2 border-slate-200 flex items-center justify-center font-bold text-xs text-slate-400 hidden md:flex z-20 hover:border-red-500 hover:text-red-500 transition-all duration-200 shadow-sm">
+                    {index + 1}
+                  </div>
+
+                  {/* Spacer placeholder side */}
+                  <div className="hidden md:block w-[45%]"></div>
+                </div>
+              );
+            })}
+          </div>
         </div>
+
       </div>
     </section>
   );
 };
 
-export default OurServices;
+export default Achievements;
+
