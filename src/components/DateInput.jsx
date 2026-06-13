@@ -18,17 +18,22 @@ const DateInputWithPlaceholder = ({ placeholder, value, onChange, name }) => {
   };
 
   return (
-    <input
-    name={name}
-      type={inputType}
-      value={value}
-      onChange={onChange}
-      onFocus={handleFocus}
-      onBlur={handleBlur}
-      placeholder={placeholder}
-      // Add your Tailwind CSS classes here
-      className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-    />
+    <div className="relative">
+      {/* Blue border/indicator on the left to match inputs */}
+      <div className="absolute left-0 top-0 h-full w-1 bg-[#164476] rounded-l-md"></div>
+
+      <input
+        name={name}
+        type={inputType}
+        value={value}
+        onChange={onChange}
+        onFocus={handleFocus}
+        onBlur={handleBlur}
+        placeholder={placeholder}
+        className="w-full pl-4 pr-3 py-3 text-gray-800 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-[#164476] focus:border-transparent transition duration-200 ease-in-out placeholder-gray-500"
+        style={{ paddingLeft: 'calc(1rem + 8px)' }}
+      />
+    </div>
   );
 };
 

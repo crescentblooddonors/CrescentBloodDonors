@@ -3,6 +3,9 @@ import React from 'react';
 const Select = ({ label, id, name, options, value, onChange, required, placeholder, ...props }) => {
   return (
     <div className="relative">
+      {/* Blue border/indicator on the left to match inputs */}
+      <div className="absolute left-0 top-0 h-full w-1 bg-[#164476] rounded-l-md"></div>
+
       <select
         id={id}
         name={name}
@@ -11,7 +14,8 @@ const Select = ({ label, id, name, options, value, onChange, required, placehold
         required={required}
         defaultValue={placeholder}
 
-        className="block w-full pl-3 pr-10 py-3 text-gray-800 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-200 ease-in-out appearance-none"
+        className="block w-full pl-4 pr-10 py-3 text-gray-800 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-[#164476] focus:border-transparent transition duration-200 ease-in-out appearance-none"
+        style={{ paddingLeft: 'calc(1rem + 8px)' }}
         {...props}
       >
         <option value="" disabled>{label}</option>
